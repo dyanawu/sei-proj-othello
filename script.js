@@ -58,9 +58,7 @@ var makeBoard = function () {
       gameboard.appendChild(square);
       square.addEventListener(
         "click",
-        function () {
-          playTurnAt(this.dataset.row, this.dataset.col);
-        }
+        function () { playTurnAt(this.dataset.row, this.dataset.col); }
       );
     }
   }
@@ -140,6 +138,10 @@ var makePiece = function (colour) {
   return piece;
 }
 
+var changePlayer = function () {
+  currentPlayer = (currentPlayer === player1) ? player2 : player1;
+}
+
 var playTurnAt = function (r, c) {
   //TODO: check for validity of move
   var playedSquare = gameState[r][c];
@@ -152,31 +154,6 @@ var playTurnAt = function (r, c) {
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
   changePlayer();
-}
-
-var changePlayer = function () {
-  currentPlayer = (currentPlayer === player1) ? player2 : player1;
-}
-
-//TODO: check if square about to be played is valid
-var checkIfValidMove = function (x, y) {
-};
-
-var getPieceObjs = function (objArr) {
-  var pcArr = [];
-  for (var i = 0; var < objArr.length; i++) {
-    pcArr.push(objArr[i].firstChild);
-  }
-}
-
-var flipPiece = function (pc) {
-  pc.classList.toggle("flipped");
-}
-
-var flipPieceArr = function (pcArr) {
-  for (var i = 0; i < pcArr.length; i++) {
-    setTimeout(flipPiece, i * 250, pcArr[i]);
-  }
 }
 
 //Set up an empty grid and game on page load
