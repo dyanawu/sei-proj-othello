@@ -36,7 +36,9 @@ var makeBoard = function () {
   /* game board = 8*8
    */
   var container = document.createElement("div");
-  container.id = "game-board";
+  container.id = "game-container";
+  var gameboard = document.createElement("div");
+  gameboard.id = "game-board";
 
   for (var r = 0; r <gridSize; r++) {
     for (var c = 0; c < gridSize; c++) {
@@ -45,7 +47,7 @@ var makeBoard = function () {
       square.dataset.row = `${r}`;
       square.dataset.col = `${c}`;
       gameState[r][c] = square;
-      container.appendChild(square);
+      gameboard.appendChild(square);
       square.addEventListener(
         "click",
         function () {
@@ -54,7 +56,7 @@ var makeBoard = function () {
       );
     }
   }
-
+  container.appendChild(gameboard);
   document.body.appendChild(container);
 }
 
