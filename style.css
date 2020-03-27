@@ -1,0 +1,33 @@
+.piece {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-color: transparent;
+  text-align: center;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+}
+
+.piece img {
+  width: 90%;
+  height: 90%;
+}
+
+.piece.flipped {
+  transform: rotate3d(-1, -1, 0, 180deg);
+}
+
+.piece-black, .piece-white {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.piece-black {
+}
+
+.piece-white {
+  transform: rotateY(180deg);
+}
