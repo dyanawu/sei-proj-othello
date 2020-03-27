@@ -15,6 +15,27 @@ var emptyGame = function () {
 var makeBoard = function () {
   /* game board = 8*8
    */
+  var container = document.createElement("div");
+  container.id = "game-board";
+
+  for (var r = 0; r <gridSize; r++) {
+    for (var c = 0; c < gridSize; c++) {
+      var square = document.createElement("div");
+      square.classList.add("square");
+      square.dataset.row = `${r}`;
+      square.dataset.col = `${c}`;
+      gameState[r][c] = square;
+      container.appendChild(square);
+      square.addEventListener(
+        "click",
+        function () {
+          playTurnAt(this.dataset.row, this.dataset.col);
+        }
+      );
+    }
+  }
+
+  document.body.appendChild(container);
 }
 
 var makePiece = function (color) {
