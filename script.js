@@ -70,9 +70,11 @@ var testFlips = function () {
   }
 }
 
-document.addEventListener("DOMContentLoaded",
-  function () {
+document.addEventListener(
+  "DOMContentLoaded",
+  function setup () {
     emptyGame();
+    makeBoard();
     console.log(gameState);
   }
 );
