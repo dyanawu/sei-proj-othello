@@ -79,15 +79,20 @@ var flipPiece = function (pc) {
 
 var testFlips = function () {
 
-  var piece = document.querySelector(".piece");
-  for (var i = 0; i < 6; i++) {
-    var newP = piece.cloneNode(true);
-    document.querySelector("body").appendChild(newP);
+var getPieceObjs = function (objArr) {
+  var pcArr = [];
+  for (var i = 0; var < objArr.length; i++) {
+    pcArr.push(objArr[i].firstChild);
   }
+}
 
-  var pieces = document.querySelectorAll(".piece");
-  for (var i = 0; i < pieces.length; i++) {
-    setTimeout(flipPiece, 250 * i, pieces[i]);
+var flipPiece = function (pc) {
+  pc.classList.toggle("flipped");
+}
+
+var flipPieceArr = function (pcArr) {
+  for (var i = 0; i < pcArr.length; i++) {
+    setTimeout(flipPiece, i * 250, pcArr[i]);
   }
 }
 
