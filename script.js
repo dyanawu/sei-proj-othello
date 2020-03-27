@@ -84,11 +84,11 @@ var initGame = function () {
 // Turn-related helper functions
 
 //TODO: check if square about to be played is valid
-var isEmpty = function (squareObj) {
+
+var isTaken = function (squareObj) {
   if (squareObj.firstChild === null) {
     return true;
   }
-
   return false;
 }
 
@@ -145,9 +145,7 @@ var changePlayer = function () {
 var playTurnAt = function (r, c) {
   //TODO: check for validity of move
   var playedSquare = gameState[r][c];
-  if (isEmpty(playedSquare)) {
-    break;
-  } else {
+  if (isTaken(playedSquare)) {
     console.log("Square already taken");
     return;
   }
