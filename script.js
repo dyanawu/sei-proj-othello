@@ -59,18 +59,27 @@ var makeBoard = function () {
   document.body.appendChild(container);
 }
 
-var makePiece = function (color) {
-  /* game piece div
-     <div class="piece">
-     <div class="piece-black">
-     <img src="./img/blackcircle.png">
-     </div>
-     <div class="piece-white">
-     <img src="./img/whitecircle.png">
-     </div>
-     </div>
-  */
+var makePiece = function (colour) {
+  //helper subfunction to make the div for both sides of the image
+  var makeSide = function (colour) {
+    var side = document.createElement("div");
+    side.classList.add(`piece-${colour}`);
+    var sideImg = document.createElement("img");
+    sideImg.src = `./img/${colour}circle.png`;
+    side.appendChild(sideImg);
+    return side;
+  };
 
+  var piece = document.createElement("div");
+  piece.classList.add("piece");
+  piece.appendChild(makeSide("black"));
+  piece.appendChild(makeSide("white"));
+
+  if (colour === "white") {
+    piece.classList.add("white-up");
+  }
+
+  return piece;
 }
 
 var flipPiece = function (pc) {
