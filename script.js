@@ -32,7 +32,6 @@ var emptyGame = function () {
   }
 }
 
-
 var makeBoard = function () {
   /* game board = 8*8
    */
@@ -82,11 +81,21 @@ var makePiece = function (colour) {
   return piece;
 }
 
-var flipPiece = function (pc) {
-  pc.classList.toggle("flipped");
+var playTurnAt = function (r, c) {
+  //TODO: check for validity of move
+  var playedSquare = gameState[r][c];
+  var piece = makePiece(currentPlayer.colour);
+  playedSquare.appendChild(piece);
+  changePlayer();
 }
 
-var testFlips = function () {
+var changePlayer = function () {
+  currentPlayer = (currentPlayer === player1) ? player2 : player1;
+}
+
+//TODO: check if square about to be played is valid
+var checkIfValidMove = function (x, y) {
+};
 
 var getPieceObjs = function (objArr) {
   var pcArr = [];
