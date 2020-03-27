@@ -4,9 +4,17 @@
 2. Approach taken
   * Problem breakdown
 
-    Existing: tictactoe grid
+    Existing knowledge: tictactoe grid, the idea of using an array of arrays to store game state
 
-    First thing I did: find out how to flip a single piece and write a func for it
+    Things I did:
+
+    0. Skim the rules, because I remember being rubbish at this game. Confirmed I am rubbish at this game.
+    1. Find out how to flip a single piece and write styles and functions for it elsewhere, then throw it away.
+    2. Bring in my existing tictactoe grid generation function and modify it to generate the Othello grid instead. I also updated the game state storage AoA to store object references to the created squares on the grid, instead of just strings representing the owner of the square.
+    3. Write helper functions (at least signatures):
+      * something to flip individual pieces
+      * something that will eventually flip an array of pieces
+      * something to find pieces to flip (this doubles as checking if a played move is valid, because Rules.
 
 3. Install instructions
 4. Unsolved problems
