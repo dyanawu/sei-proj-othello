@@ -87,9 +87,9 @@ var initGame = function () {
 
 var isTaken = function (squareObj) {
   if (squareObj.firstChild === null) {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 }
 
 var checkIfValidMove = function (r, c) {
