@@ -9,7 +9,14 @@ const VECTORS = {
   NW: [-1,  1]
 };
 
-var gridSize = 8;
+const STARTPOINTS = [
+  [3, 3],
+  [3, 4],
+  [4, 3],
+  [4, 4]
+];
+
+var gridSize = 8; // defined here so there's room to grow maybe
 var gameState = [];
 
 var player1 = {
@@ -22,6 +29,7 @@ var player2 = {
 
 var currentPlayer = player1;
 
+// General game setup helper functions
 var emptyGame = function () {
   gameState = [];
   for (var r = 0; r < gridSize; r++) {
@@ -60,6 +68,55 @@ var makeBoard = function () {
   document.body.appendChild(container);
 }
 
+var initGame = function () {
+  for (var i = 0; i < 4; i++) {
+    var [r, c] = STARTPOINTS[i];
+    var square = gameState[r][c];
+    console.log(`row ${r}, col ${c}`);
+    if (i === 0 || i === 3) {
+      var piece = makePiece("white");
+      square.appendChild(piece);
+    } else {
+      var piece = makePiece("black");
+      square.appendChild(piece);
+    }
+  }
+}
+
+// Turn-related helper functions
+
+//TODO: check if square about to be played is valid
+var isEmpty = function (squareObj) {
+  if (squareObj.firstChild === null) {
+    return true;
+  }
+
+  return false;
+}
+
+var checkIfValidMove = function (r, c) {
+};
+
+var findPieces = function (r, c) {
+}
+
+var getPieceObjs = function (objArr) {
+  var pcArr = [];
+  for (var i = 0; i < objArr.length; i++) {
+    pcArr.push(objArr[i].firstChild);
+  }
+}
+
+var flipPiece = function (pc) {
+  pc.classList.toggle("flipped");
+}
+
+var flipPieceArr = function (pcArr) {
+  for (var i = 0; i < pcArr.length; i++) {
+    setTimeout(flipPiece, i * 250, pcArr[i]);
+  }
+}
+
 var makePiece = function (colour) {
   //helper subfunction to make the div for both sides of the image
   var makeSide = function (colour) {
@@ -86,6 +143,12 @@ var makePiece = function (colour) {
 var playTurnAt = function (r, c) {
   //TODO: check for validity of move
   var playedSquare = gameState[r][c];
+  if (isEmpty(playedSquare)) {
+    break;
+  } else {
+    console.log("Square already taken");
+    return;
+  }
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
   changePlayer();
@@ -116,11 +179,13 @@ var flipPieceArr = function (pcArr) {
   }
 }
 
+//Set up an empty grid and game on page load
 document.addEventListener(
   "DOMContentLoaded",
   function setup () {
     emptyGame();
     makeBoard();
+    initGame();
     console.log(gameState);
   }
 );
