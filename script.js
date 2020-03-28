@@ -103,10 +103,10 @@ var isTaken = function (squareObj) {
   return true;
 };
 
-var checkIfValidMove = function (r, c) {
+var isInvalid = function (r, c) {
 };
 
-var findPieces = function (r, c) {
+var findPieces = function (r, c, vec) {
 };
 
 var getPieceObjs = function (objArr) {
