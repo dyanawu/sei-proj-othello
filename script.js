@@ -1,3 +1,16 @@
+// mvp breakdown
+// make grid
+// make pieces
+// make pieces flippable
+// make pieces playable
+// auto alternate turns
+
+
+// further
+// detect move validity and get flippable pieces, flip pieces
+// track current score, report win
+// css flip in direction of play
+
 const VECTORS = {
   N:  [ 0,  1],
   S:  [ 0, -1],
