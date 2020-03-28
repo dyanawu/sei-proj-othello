@@ -51,7 +51,7 @@ var emptyGame = function () {
       gameState[r][c] = null;
     }
   }
-}
+};
 
 var makeBoard = function () {
   /* game board = 8*8
@@ -77,7 +77,7 @@ var makeBoard = function () {
   }
   container.appendChild(gameboard);
   document.body.appendChild(container);
-}
+};
 
 var initGame = function () {
   for (var i = 0; i < 4; i++) {
@@ -92,31 +92,29 @@ var initGame = function () {
       square.appendChild(piece);
     }
   }
-}
+};
 
 // Turn-related helper functions
-
-//TODO: check if square about to be played is valid
 
 var isTaken = function (squareObj) {
   if (squareObj.firstChild === null) {
     return false;
   }
   return true;
-}
+};
 
 var checkIfValidMove = function (r, c) {
 };
 
 var findPieces = function (r, c) {
-}
+};
 
 var getPieceObjs = function (objArr) {
   var pcArr = [];
   for (var i = 0; i < objArr.length; i++) {
     pcArr.push(objArr[i].firstChild);
   }
-}
+};
 
 var flipPiece = function (pc) {
   pc.classList.toggle("flipped");
@@ -126,7 +124,7 @@ var flipPieceArr = function (pcArr) {
   for (var i = 0; i < pcArr.length; i++) {
     setTimeout(flipPiece, i * 250, pcArr[i]);
   }
-}
+};
 
 var makePiece = function (colour) {
   //helper subfunction to make the div for both sides of the image
@@ -149,11 +147,11 @@ var makePiece = function (colour) {
   }
 
   return piece;
-}
+};
 
 var changePlayer = function () {
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
-}
+};
 
 var playTurnAt = function (r, c) {
   //TODO: check for validity of move
@@ -167,7 +165,7 @@ var playTurnAt = function (r, c) {
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
   changePlayer();
-}
+};
 
 //Set up an empty grid and game on page load
 document.addEventListener(
