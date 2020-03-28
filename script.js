@@ -116,7 +116,7 @@ var getPieceObjs = function (objArr) {
 };
 
 var flipPiece = function (pc) {
-  pc.classList.toggle("flipped");
+  pc.classList.toggle("white-up");
 }
 
 var flipPieceArr = function (pcArr) {
