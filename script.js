@@ -11,14 +11,14 @@
 // css flip in direction of play
 
 const VECTORS = {
-  N:  [ 0,  1],
-  S:  [ 0, -1],
-  E:  [ 1,  0],
-  W:  [-1,  0],
-  NE: [ 1,  1],
-  SE: [ 1, -1],
-  SW: [-1, -1],
-  NW: [-1,  1]
+  N  : { row: -1, col:  0 },
+  NE : { row: -1, col:  1 },
+  E  : { row:  0, col:  1 },
+  SE : { row:  1, col:  1 },
+  S  : { row:  1, col:  0 },
+  SW : { row:  1, col: -1 },
+  W  : { row:  0, col: -1 },
+  NW : { row: -1, col: -1 }
 };
 
 const STARTPOINTS = [
