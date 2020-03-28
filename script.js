@@ -5,7 +5,6 @@
 // make pieces playable
 // auto alternate turns
 
-
 // further
 // detect move validity and get flippable pieces, flip pieces
 // track current score, report win
@@ -131,9 +130,6 @@ var makePiece = function (colour) {
   var makeSide = function (colour) {
     var side = document.createElement("div");
     side.classList.add(`piece-${colour}`);
-    var sideImg = document.createElement("img");
-    sideImg.src = `./img/${colour}circle.png`;
-    side.appendChild(sideImg);
     return side;
   };
 
