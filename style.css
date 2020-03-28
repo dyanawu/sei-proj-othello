@@ -23,6 +23,22 @@
   background-color: white;
 }
 
+.square.flash {
+  animation: flash 2s forwards linear normal;
+}
+
+@keyframes flash {
+  0% {
+    background: white;
+  }
+  30% {
+    background: #CD5C5C;
+  }
+  100% {
+    background: white;
+  }
+}
+
 /*
 Styling for game pieces
 'default' side up is black

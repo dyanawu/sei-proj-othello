@@ -146,7 +146,9 @@ var playTurnAt = function (r, c) {
   //TODO: check for validity of move
   var playedSquare = gameState[r][c];
   if (isTaken(playedSquare)) {
-    console.log("Square already taken");
+    console.log("Square already played");
+    playedSquare.classList.add("flash");
+    setTimeout (function () { playedSquare.classList.remove("flash"); }, 2500)
     return;
   }
   var piece = makePiece(currentPlayer.colour);
