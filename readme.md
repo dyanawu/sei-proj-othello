@@ -19,7 +19,21 @@
 
     d. Build game functionality
 
-    As it turned out, placing pieces was not too difficult, just `appendChild` piece `div`s into each game cell object in `gameState`.
+    As it turned out, placing pieces was not too difficult, just `appendChild` piece `div`s into each game cell object in `gameState`. Alternating between inputs was also simple enough, by keeping `currentPlayer` updated on each turn played. The detection of invalid moves basically was the same algorithm as for finding opponent pieces to flip:
+
+       - given an origin and a vector (representing the number of rows/columns to move for each step):
+         - search in the next square according to the vector
+            - if the edge of the board is encountered, return an empty array
+            - if an empty square is encountered, return an empty array
+            - if an opponent piece is encountered, record that piece to be flipped in an array and proceed to the next square to search
+            - if own piece is encountered, end search and return whatever was previously recorded
+
+       - repeat above, for each direction (8 directions in total)
+
+
+    Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
+
+    This is great! But now I have another problem: what if a player just does not have any valid moves left? I am not at this stage checking all possible playable squares (that's a TODO), but if a player has all possible moves rejected, the game is now stuck (in software), while the rules say what should happen is that the next player then takes a turn, until the player becomes unstuck. This is temporarily resolved by adding a button that lets players skip moves. Should both players be unable to continue playing, they can just refresh the page ^_^
 
 3. Install instructions
 
