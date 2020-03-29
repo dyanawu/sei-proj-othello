@@ -24,7 +24,7 @@
 }
 
 .square.flash {
-  animation: flash 2s forwards linear normal;
+  animation: flash 2s forwards ease-in-out normal;
 }
 
 @keyframes flash {
@@ -54,20 +54,19 @@ Styling for game pieces
   justify-content: center;
 
   background-color: transparent;
-  transition: transform 1s;
+  transition: transform 0.8s linear;
   transform-style: preserve-3d;
-}
-
-.piece.white {
-  transform: rotate3d(-1, -1, 0, 180deg);
 }
 
 .piece.black {
   transform: rotate3d(-1, -1, 0, 0deg);
 }
 
+.piece.white {
+  transform: rotate3d(-1, -1, 0, 180deg);
+}
+
 .piece-black, .piece-white {
-  background-color: lightpink;
   width: 80%;
   height: 80%;
 
