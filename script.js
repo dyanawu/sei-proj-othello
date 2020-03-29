@@ -5,8 +5,12 @@
 // make pieces playable
 // auto alternate turns
 
-// further
+// further DONE
 // detect move validity and get flippable pieces, flip pieces
+
+// further TODO
+// add ability to skip moves voluntarily
+// skip a player's moves if they have no valid moves
 // track current score, report win
 // css flip in direction of play
 
@@ -70,7 +74,7 @@ var makeBoard = function () {
       gameboard.appendChild(square);
       square.addEventListener(
         "click",
-        function () { playTurnAt(this.dataset.row, this.dataset.col); }
+        function () { playTurnAt(this); }
       );
     }
   }
@@ -102,10 +106,40 @@ var isTaken = function (squareObj) {
   return true;
 };
 
-var isInvalid = function (r, c) {
-};
+var findSquaresToFlip = function (squareObj, vec) {
+  var pieces = [];
+  var row = Number(squareObj.dataset.row);
+  var col = Number(squareObj.dataset.col);
 
-var findPieces = function (r, c, vec) {
+  //row and column to search in
+  var sRow = row + vec.row;
+  var sCol = col + vec.col;
+
+  //for now, player and opponent colours
+  var pColour = currentPlayer.colour;
+  var oColour = (pColour === "black" ? "white" : "black");
+
+  while ((sRow >= 0 && sRow < gridSize) &&
+         (sCol >= 0 && sCol < gridSize)) {
+    var searchSq = gameState[sRow][sCol];
+    var searchPc = searchSq.firstChild;
+
+    if (searchPc === null) {
+      return [];
+    } else {
+      searchPc = searchPc.classList.contains("black") ? "black" : "white";
+      if (searchPc === oColour) {
+        console.log("added");
+        pieces.push([sRow, sCol]);
+      } else {
+        return pieces;
+      }
+    }
+    sRow += vec.row;
+    sCol += vec.col;
+  }
+
+  return [];
 };
 
 var getPieceObjs = function (objArr) {
@@ -116,12 +150,20 @@ var getPieceObjs = function (objArr) {
 };
 
 var flipPiece = function (pc) {
-  pc.classList.toggle("white-up");
+  pc.classList.toggle("white");
+  pc.classList.toggle("black");
 }
 
-var flipPieceArr = function (pcArr) {
+var flipSquares = function (sqArr) {
+  console.log("will flip ", sqArr);
+  var pcArr = [];
+  for (var sq = 0; sq < sqArr.length; sq++) {
+    var pc = gameState[sqArr[sq][0]][sqArr[sq][1]];
+    pcArr.push(pc.firstChild);
+  }
+  console.log(pcArr);
   for (var i = 0; i < pcArr.length; i++) {
-    setTimeout(flipPiece, i * 250, pcArr[i]);
+    setTimeout(flipPiece, i * 300, pcArr[i]);
   }
 };
 
@@ -138,9 +180,7 @@ var makePiece = function (colour) {
   piece.appendChild(makeSide("black"));
   piece.appendChild(makeSide("white"));
 
-  if (colour === "white") {
-    piece.classList.add("white-up");
-  }
+  piece.classList.add((colour === "black") ? "black" : "white" );
 
   return piece;
 };
@@ -149,15 +189,34 @@ var changePlayer = function () {
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
 };
 
-var playTurnAt = function (r, c) {
-  //TODO: check for validity of move
-  var playedSquare = gameState[r][c];
+var playTurnAt = function (squareObj) {
+  var playedSquare = squareObj;
   if (isTaken(playedSquare)) {
     console.log("Square already played");
     playedSquare.classList.add("flash");
     setTimeout (function () { playedSquare.classList.remove("flash"); }, 2500)
     return;
   }
+
+  var squaresToFlip = {};
+  for (dir in VECTORS) {
+    squaresToFlip[dir] = findSquaresToFlip(playedSquare, VECTORS[dir]);
+  }
+  var isInvalidMove = true;
+  for (dir in squaresToFlip) {
+    if (squaresToFlip[dir].length > 0) {
+      isInvalidMove = false;
+      flipSquares(squaresToFlip[dir]);
+    }
+  }
+
+  if (isInvalidMove) {
+    console.log("Invalid move");
+    playedSquare.classList.add("flash");
+    setTimeout (function () { playedSquare.classList.remove("flash"); }, 2500)
+    return;
+  }
+
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
   changePlayer();

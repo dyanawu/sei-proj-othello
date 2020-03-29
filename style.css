@@ -58,8 +58,12 @@ Styling for game pieces
   transform-style: preserve-3d;
 }
 
-.piece.white-up {
+.piece.white {
   transform: rotate3d(-1, -1, 0, 180deg);
+}
+
+.piece.black {
+  transform: rotate3d(-1, -1, 0, 0deg);
 }
 
 .piece-black, .piece-white {
