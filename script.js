@@ -98,14 +98,6 @@ var initGame = function () {
 };
 
 // Turn-related helper functions
-
-var isTaken = function (squareObj) {
-  if (squareObj.firstChild === null) {
-    return false;
-  }
-  return true;
-};
-
 var findSquaresToFlip = function (squareObj, vec) {
   var pieces = [];
   var row = Number(squareObj.dataset.row);
@@ -189,9 +181,16 @@ var changePlayer = function () {
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
 };
 
+// main turn function
 var playTurnAt = function (squareObj) {
   var playedSquare = squareObj;
-  if (isTaken(playedSquare)) {
+
+  var isTaken = false;
+  if (playedSquare.firstChild !== null) {
+    isTaken = true;
+  }
+
+  if (isTaken) {
     console.log("Square already played");
     playedSquare.classList.add("flash");
     setTimeout (function () { playedSquare.classList.remove("flash"); }, 2500)
@@ -202,6 +201,7 @@ var playTurnAt = function (squareObj) {
   for (dir in VECTORS) {
     squaresToFlip[dir] = findSquaresToFlip(playedSquare, VECTORS[dir]);
   }
+
   var isInvalidMove = true;
   for (dir in squaresToFlip) {
     if (squaresToFlip[dir].length > 0) {
@@ -209,7 +209,6 @@ var playTurnAt = function (squareObj) {
       flipSquares(squaresToFlip[dir]);
     }
   }
-
   if (isInvalidMove) {
     console.log("Invalid move");
     playedSquare.classList.add("flash");
