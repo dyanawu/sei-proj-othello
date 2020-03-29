@@ -82,6 +82,32 @@ var makeBoard = function () {
   document.body.appendChild(container);
 };
 
+var makeStatusPane = function () {
+  var container = document.querySelector("#game-container");
+
+  var statusPane = document.createElement("div");
+  statusPane.id = "game-statuspane";
+
+
+  var turnPane = document.createElement("div");
+  turnPane.id = "status-turn";
+
+  turnPane.innerHTML = "<h2>Current turn<h2>";
+
+  var playerDisp = document.createElement("h1");
+  playerDisp.id = "current-player";
+  playerDisp.innerText = currentPlayer.colour;
+
+  var passButton = document.createElement("button");
+  passButton.addEventListener("click", changePlayer);
+  passButton.innerText = "Pass turn";
+
+  turnPane.appendChild(playerDisp);
+  turnPane.appendChild(passButton);
+  statusPane.appendChild(turnPane);
+  container.appendChild(statusPane);
+}
+
 var initGame = function () {
   for (var i = 0; i < 4; i++) {
     var [r, c] = STARTPOINTS[i];
@@ -179,6 +205,7 @@ var makePiece = function (colour) {
 
 var changePlayer = function () {
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
+  document.querySelector("#current-player").innerText = currentPlayer.colour;
 };
 
 // main turn function
@@ -227,6 +254,7 @@ document.addEventListener(
   function setup () {
     emptyGame();
     makeBoard();
+    makeStatusPane();
     initGame();
     console.log(gameState);
   }
