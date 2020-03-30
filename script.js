@@ -105,10 +105,7 @@ var makeStatusPane = function () {
   var playerDisp = document.createElement("h1");
   playerDisp.id = "current-player";
   playerDisp.innerText = currentPlayer.colour;
-
-  var passButton = document.createElement("button");
-  passButton.addEventListener("click", changePlayer);
-  passButton.innerText = "Pass turn";
+  turnPane.appendChild(playerDisp);
 
   var scoreBoard = function (player) {
     var scoreB = document.createElement("div");
@@ -127,8 +124,12 @@ var makeStatusPane = function () {
   var p1ScoreB = scoreBoard(player1);
   var p2ScoreB = scoreBoard(player2);
 
-  turnPane.appendChild(playerDisp);
-  turnPane.appendChild(passButton);
+  //debug mode only
+  // var passButton = document.createElement("button");
+  // passButton.addEventListener("click", changePlayer);
+  // passButton.innerText = "Pass turn";
+  // turnPane.appendChild(passButton);
+
   statusPane.appendChild(turnPane);
   statusPane.insertBefore(p1ScoreB, turnPane);
   statusPane.appendChild(p2ScoreB);
@@ -294,9 +295,8 @@ var flashSquare = function (squareObj) {
 
 var displayAlert = function (str, colour) {
   var modal = document.querySelector(".modal");
-  if (modal.style.display === "block") {
+  if (modal.firstChild !== null) {
   modal.removeChild(modal.firstChild);
-  modal.style.display = "none";
   }
 
   var modalContent = document.createElement("div");

@@ -54,6 +54,10 @@ Page and game board styling
   margin: 0;
 }
 
+#status-turn h1 {
+  font-size: 50px;
+}
+
 #status-turn button {
   font-family: inherit;
   font-weight: bold;
