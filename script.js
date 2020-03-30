@@ -84,7 +84,7 @@ var makeBoard = function () {
       square.dataset.col = `${c}`;
       gameState[r][c] = square;
       gameboard.appendChild(square);
-      square.addEventListener("click", playTurnAt);
+      square.addEventListener("click", clickHandler);
     }
   }
   container.appendChild(gameboard);
@@ -189,6 +189,14 @@ var setup = function () {
 
 
 // Turn-related helper functions
+var clickHandler = function () {
+  if (currentPlayer.mode === "auto") {
+    return;
+  }
+  var clickedSquare = event.target;
+  playTurnAt(clickedSquare);
+}
+
 var updateScore = function () {
   player1.score = 0;
   player2.score = 0;
@@ -406,11 +414,7 @@ var autoPlay = function () {
 
 // main turn function
 var playTurnAt = function (squareObj) {
-  if (event.target.type === "submit") {
-    var playedSquare = squareObj;
-  } else {
-    var playedSquare = event.target;
-  }
+  var playedSquare = squareObj;
 
   if (!playedSquare.classList.contains("valid")) {
     flashSquare(playedSquare);
