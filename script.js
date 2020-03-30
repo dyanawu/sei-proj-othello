@@ -144,7 +144,6 @@ var initGame = function () {
   for (var i = 0; i < 4; i++) {
     var [r, c] = STARTPOINTS[i];
     var square = gameState[r][c];
-    console.log(`row ${r}, col ${c}`);
     if (i === 0 || i === 3) {
       var piece = makePiece("white");
       square.dataset.colour = "white";
