@@ -55,13 +55,13 @@ Page and game board styling
 }
 
 #status-turn h1 {
-  font-size: 50px;
+  font-size: 45px;
 }
 
 #status-turn button {
   font-family: inherit;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   text-transform: uppercase;
 

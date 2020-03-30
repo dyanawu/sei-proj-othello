@@ -11,9 +11,9 @@
 // skip a player's moves if they have no valid moves
 // track current score, report win
 // friendly modal to display info
+// random autoplay (button only)
 
 // further TODO
-// random autoplay
 // css flip in direction of play
 
 const VECTORS = {
@@ -81,10 +81,7 @@ var makeBoard = function () {
       square.dataset.col = `${c}`;
       gameState[r][c] = square;
       gameboard.appendChild(square);
-      square.addEventListener(
-        "click",
-        function () { playTurnAt(this); }
-      );
+      square.addEventListener("click", playTurnAt);
     }
   }
   container.appendChild(gameboard);
@@ -129,6 +126,12 @@ var makeStatusPane = function () {
   // passButton.addEventListener("click", changePlayer);
   // passButton.innerText = "Pass turn";
   // turnPane.appendChild(passButton);
+
+  var autoButton = document.createElement("button");
+  autoButton.id = "button-dwim";
+  autoButton.addEventListener("click", autoPlay);
+  autoButton.innerText = "Play this turn for me";
+  turnPane.appendChild(autoButton);
 
   statusPane.appendChild(turnPane);
   statusPane.insertBefore(p1ScoreB, turnPane);
@@ -348,9 +351,22 @@ var checkGame = function () {
   }
 };
 
+
+var autoPlay = function () {
+  var squares = getValidSquares();
+  var i = Math.floor(Math.random() * squares.length);
+  squareToPlay = squares[i];
+
+  playTurnAt(squareToPlay);
+}
+
 // main turn function
 var playTurnAt = function (squareObj) {
-  var playedSquare = squareObj;
+  if (event.target.type === "submit") {
+    var playedSquare = squareObj;
+  } else {
+    var playedSquare = event.target;
+  }
 
   if (!playedSquare.classList.contains("valid")) {
     flashSquare(playedSquare);
