@@ -174,6 +174,11 @@ var initGame = function () {
 
 var setup = function () {
   document.body.innerHTML = "";
+
+  currentPlayer = player1;
+  player1.score = 0;
+  player2.score = 0;
+
   emptyGame();
   makeBoard();
   makeStatusPane();
