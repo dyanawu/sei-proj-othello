@@ -45,8 +45,11 @@ var player2 = {
 
 var currentPlayer = player1;
 
+var skipped = [];
+
 // General game setup helper functions
 var emptyGame = function () {
+  skipped = [];
   gameState = [];
   for (var r = 0; r < gridSize; r++) {
     gameState[r] = [];
@@ -88,10 +91,8 @@ var makeStatusPane = function () {
   var statusPane = document.createElement("div");
   statusPane.id = "game-statuspane";
 
-
   var turnPane = document.createElement("div");
   turnPane.id = "status-turn";
-
   turnPane.innerHTML = "<h2>Current turn<h2>";
 
   var playerDisp = document.createElement("h1");
@@ -124,6 +125,42 @@ var initGame = function () {
 };
 
 // Turn-related helper functions
+
+var getValidSquares = function () {
+  var validSquares = document.querySelectorAll(".valid");
+  return validSquares;
+};
+
+var unsetValidSquares = function () {
+  var validSquares = getValidSquares();
+  for (var i = 0; i < validSquares.length; i++) {
+    validSquares[i].classList.remove("valid");
+  }
+  return;
+};
+
+var findValidSquares = function () {
+  var squares = document.querySelectorAll(".square");
+  for (var i = 0; i < squares.length; i++) {
+    checkSq = squares[i];
+
+    // if the square is taken, it can't be played
+    if (checkSq.firstChild !==null) {
+      continue;
+    }
+    var squaresToFlip = {};
+    for (dir in VECTORS) {
+      squaresToFlip[dir] = findSquaresToFlip(checkSq, VECTORS[dir]);
+    }
+
+    for (dir in squaresToFlip) {
+      if (squaresToFlip[dir].length > 0) {
+        checkSq.classList.add("valid");
+      }
+    }
+  }
+}
+
 var findSquaresToFlip = function (squareObj, vec) {
   var pieces = [];
   var row = Number(squareObj.dataset.row);
@@ -147,7 +184,6 @@ var findSquaresToFlip = function (squareObj, vec) {
     } else {
       searchPc = searchPc.classList.contains("black") ? "black" : "white";
       if (searchPc === oColour) {
-        console.log("added");
         pieces.push([sRow, sCol]);
       } else {
         return pieces;
@@ -170,16 +206,14 @@ var getPieceObjs = function (objArr) {
 var flipPiece = function (pc) {
   pc.classList.toggle("white");
   pc.classList.toggle("black");
-}
+};
 
 var flipSquares = function (sqArr) {
-  console.log("will flip ", sqArr);
   var pcArr = [];
   for (var sq = 0; sq < sqArr.length; sq++) {
     var pc = gameState[sqArr[sq][0]][sqArr[sq][1]];
     pcArr.push(pc.firstChild);
   }
-  console.log(pcArr);
   for (var i = 0; i < pcArr.length; i++) {
     setTimeout(flipPiece, i * 300, pcArr[i]);
   }
@@ -206,46 +240,39 @@ var makePiece = function (colour) {
 var changePlayer = function () {
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
   document.querySelector("#current-player").innerText = currentPlayer.colour;
+  findValidSquares();
+
+};
+
 };
 
 // main turn function
 var playTurnAt = function (squareObj) {
   var playedSquare = squareObj;
 
-  var isTaken = false;
-  if (playedSquare.firstChild !== null) {
-    isTaken = true;
-  }
-
-  if (isTaken) {
-    console.log("Square already played");
-    playedSquare.classList.add("flash");
-    setTimeout (function () { playedSquare.classList.remove("flash"); }, 2500)
+  if (!playedSquare.classList.contains("valid")) {
+    flashSquare(playedSquare);
     return;
   }
 
+  skipped = [];
   var squaresToFlip = {};
   for (dir in VECTORS) {
     squaresToFlip[dir] = findSquaresToFlip(playedSquare, VECTORS[dir]);
   }
 
-  var isInvalidMove = true;
   for (dir in squaresToFlip) {
     if (squaresToFlip[dir].length > 0) {
-      isInvalidMove = false;
       flipSquares(squaresToFlip[dir]);
     }
-  }
-  if (isInvalidMove) {
-    console.log("Invalid move");
-    playedSquare.classList.add("flash");
-    setTimeout (function () { playedSquare.classList.remove("flash"); }, 2500)
-    return;
   }
 
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
-  changePlayer();
+
+
+  unsetValidSquares();
+  setTimeout(changePlayer, 1000);
 };
 
 //Set up an empty grid and game on page load
@@ -256,6 +283,7 @@ document.addEventListener(
     makeBoard();
     makeStatusPane();
     initGame();
+    findValidSquares();
     console.log(gameState);
   }
 );
