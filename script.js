@@ -10,8 +10,10 @@
 // add ability to skip moves voluntarily
 // skip a player's moves if they have no valid moves
 // track current score, report win
+// friendly modal to display info
 
 // further TODO
+// random autoplay
 // css flip in direction of play
 
 const VECTORS = {
@@ -68,6 +70,8 @@ var makeBoard = function () {
   container.id = "game-container";
   var gameboard = document.createElement("div");
   gameboard.id = "game-board";
+  var modal = document.createElement("div");
+  modal.classList.add("modal");
 
   for (var r = 0; r <gridSize; r++) {
     for (var c = 0; c < gridSize; c++) {
@@ -84,6 +88,7 @@ var makeBoard = function () {
     }
   }
   container.appendChild(gameboard);
+  container.appendChild(modal);
   document.body.appendChild(container);
 };
 
@@ -105,22 +110,22 @@ var makeStatusPane = function () {
   passButton.addEventListener("click", changePlayer);
   passButton.innerText = "Pass turn";
 
-  var p1ScoreB = document.createElement("div");
-  p1ScoreB.classList.add("score");
-  p1ScoreB.innerHTML = `<h2>${player1.colour}</h2>`;
+  var scoreBoard = function (player) {
+    var scoreB = document.createElement("div");
+    scoreB.classList.add("score");
+    scoreB.innerHTML = `<h2>${player.colour}</h2>`;
 
-  var p1Score = document.createElement("h1");
-  p1Score.id = "p1-score";
-  p1Score.innerText = `${player1.score}`;
-  p1ScoreB.appendChild(p1Score);
+    var score = document.createElement("h1");
+    var id = player.colour === "black" ? "p1" : "p2";
+    score.id = id + "-score";
+    score.innerText = `${player.score}`;
+    scoreB.appendChild(score);
 
-  var p2ScoreB = document.createElement("div");
-  p2ScoreB.classList.add("score");
-  p2ScoreB.innerHTML = `<h2>${player2.colour}</h2>`;
-  var p2Score = document.createElement("h1");
-  p2Score.id = "p2-score";
-  p2Score.innerHTML = `${player2.score}`;
-  p2ScoreB.appendChild(p2Score);
+    return scoreB;
+  }
+
+  var p1ScoreB = scoreBoard(player1);
+  var p2ScoreB = scoreBoard(player2);
 
   turnPane.appendChild(playerDisp);
   turnPane.appendChild(passButton);
@@ -287,8 +292,26 @@ var flashSquare = function (squareObj) {
   return;
 };
 
-var displayAlert = function (str) {
-  //TODO make a friendly display to replace console.log
+var displayAlert = function (str, colour) {
+  var modal = document.querySelector(".modal");
+  if (modal.style.display === "block") {
+  modal.removeChild(modal.firstChild);
+  modal.style.display = "none";
+  }
+
+  var modalContent = document.createElement("div");
+  modalContent.classList.add("modal-content");
+  modalContent.innerText = str;
+
+  modal.appendChild(modalContent);
+  modalContent.style.border = `80px solid ${colour}`;
+  modal.style.display = "block";
+
+  window.onclick = function (event) {
+    if (event.target === modal || event.target === modalContent) {
+      modal.style.display = "none";
+    }
+  }
 };
 
 var changePlayer = function () {
@@ -304,20 +327,23 @@ var changePlayer = function () {
 var checkGame = function () {
   var validSquares = getValidSquares();
   if (validSquares.length === 0) {
-    console.log("no valid moves, skip turn");
+    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink");
     skipped.push(currentPlayer);
     if (skipped.length < 2) {
       changePlayer();
       return;
     } else {
-      console.log("game over, no valid moves");
+      var outStr = "Game over, no more valid moves.";
+
       if (player1.score > player2.score) {
-        console.log(`Winner: ${player1.colour}, ${player1.score} pieces.`);
+        outStr += `\nWinner: ${player1.colour}, ${player1.score} pieces.`;
       } else if (player2.score > player1.score) {
-        console.log(`Winner: ${player2.colour}, ${player2.score} pieces.`);
+        outStr += `\nWinner: ${player2.colour}, ${player2.score} pieces.`;
       } else {
-        console.log("Draw!");
+        outStr += "\nGame ended in a draw.";
       }
+
+      displayAlert(outStr, "lightblue");
     }
   }
 };

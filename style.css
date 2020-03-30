@@ -101,6 +101,35 @@ Page and game board styling
 }
 
 /*
+Modal styling
+*/
+.modal {
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 80%;
+  display: none;
+}
+
+.modal-content {
+  margin: 8px auto;
+  box-sizing: border-box;
+  width: 724px;
+  height: 724px;
+
+  font-size: 30px;
+  font-weight: bold;
+
+  text-align: center;
+  padding-top: 18.5%;
+  background-color: white;
+}
+
+/*
 Styling for game cells
 */
 
