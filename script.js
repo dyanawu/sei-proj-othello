@@ -315,10 +315,10 @@ var displayAlert = function (str, colour) {
 
   var modalContent = document.createElement("div");
   modalContent.classList.add("modal-content");
-  modalContent.innerText = str;
+  modalContent.innerHTML = `<p>${str}</p>`;
 
   modal.appendChild(modalContent);
-  modalContent.style.border = `80px solid ${colour}`;
+  modalContent.style.border = `92px solid ${colour}`;
   modal.style.display = "block";
 
   window.onclick = function (event) {

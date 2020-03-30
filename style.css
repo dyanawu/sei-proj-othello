@@ -120,17 +120,21 @@ Modal styling
 }
 
 .modal-content {
+  display: flex;
+  justify-content: center;
+  align-content: center;
   margin: 8px auto;
   box-sizing: border-box;
   width: 724px;
   height: 724px;
+  background-color: white;
+}
 
+.modal-content p {
+  margin: auto;
+  text-align: center;
   font-size: 30px;
   font-weight: bold;
-
-  text-align: center;
-  padding-top: 18.5%;
-  background-color: white;
 }
 
 /*
