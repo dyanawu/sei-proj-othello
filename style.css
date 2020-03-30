@@ -80,8 +80,28 @@ Page and game board styling
   border-bottom: 2px solid black;
 }
 
+.score {
+  width: 22%;
+  text-align: center;
+}
+
+.score h1 {
+  font-size: 60px;
+  margin: 0;
+}
+
+.score h2 {
+  font-size: 30px;
+  margin: 0;
+  margin-top: 7px;
+}
+
+.score br {
+  height: 2px;
+}
+
 /*
-Styling for game cells and invalid move flash
+Styling for game cells
 */
 
 .square {
@@ -91,6 +111,11 @@ Styling for game cells and invalid move flash
   box-sizing: border-box;
   background-color: white;
 }
+
+.square.valid {
+  background-color: #e1ffe1;
+}
+
 
 .square.flash {
   animation: flash 2s forwards ease-in-out normal;
