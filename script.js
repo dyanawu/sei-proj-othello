@@ -205,7 +205,7 @@ var findValidSquares = function () {
 }
 
 var findSquaresToFlip = function (squareObj, vec) {
-  var pieces = [];
+  var squaresToFlip = [];
   var row = Number(squareObj.dataset.row);
   var col = Number(squareObj.dataset.col);
 
@@ -220,16 +220,16 @@ var findSquaresToFlip = function (squareObj, vec) {
   while ((sRow >= 0 && sRow < gridSize) &&
          (sCol >= 0 && sCol < gridSize)) {
     var searchSq = gameState[sRow][sCol];
-    var searchPc = searchSq.firstChild;
+//    var searchPc = searchSq.firstChild;
 
-    if (searchPc === null) {
+    if (searchSq.firstChild === null) {
       return [];
     } else {
-      searchPc = searchPc.classList.contains("black") ? "black" : "white";
-      if (searchPc === oColour) {
-        pieces.push([sRow, sCol]);
+      searchSq = searchSq.dataset.colour === "black" ? "black" : "white";
+      if (searchSq === oColour) {
+        squaresToFlip.push([sRow, sCol]);
       } else {
-        return pieces;
+        return squaresToFlip;
       }
     }
     sRow += vec.row;
@@ -348,8 +348,7 @@ var playTurnAt = function (squareObj) {
   playedSquare.appendChild(piece);
 
   updateScore();
-
-  setTimeout(changePlayer, 1000);
+  changePlayer();
 };
 
 //Set up an empty grid and game on page load
