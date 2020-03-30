@@ -7,11 +7,14 @@
 
 // further DONE
 // detect move validity and get flippable pieces, flip pieces
-
-// further TODO
 // add ability to skip moves voluntarily
 // skip a player's moves if they have no valid moves
 // track current score, report win
+
+// TOFIX:
+// score reporting lag
+
+// further TODO
 // css flip in direction of play
 
 const VECTORS = {
@@ -36,11 +39,13 @@ var gridSize = 8; // defined here so there's room to grow maybe
 var gameState = [];
 
 var player1 = {
-  colour: "black"
+  colour: "black",
+  score: 0
 };
 
 var player2 = {
-  colour: "white"
+  colour: "white",
+  score: 0
 };
 
 var currentPlayer = player1;
@@ -103,9 +108,28 @@ var makeStatusPane = function () {
   passButton.addEventListener("click", changePlayer);
   passButton.innerText = "Pass turn";
 
+  var p1ScoreB = document.createElement("div");
+  p1ScoreB.classList.add("score");
+  p1ScoreB.innerHTML = `<h2>${player1.colour}</h2>`;
+
+  var p1Score = document.createElement("h1");
+  p1Score.id = "p1-score";
+  p1Score.innerText = `${player1.score}`;
+  p1ScoreB.appendChild(p1Score);
+
+  var p2ScoreB = document.createElement("div");
+  p2ScoreB.classList.add("score");
+  p2ScoreB.innerHTML = `<h2>${player2.colour}</h2>`;
+  var p2Score = document.createElement("h1");
+  p2Score.id = "p2-score";
+  p2Score.innerHTML = `${player2.score}`;
+  p2ScoreB.appendChild(p2Score);
+
   turnPane.appendChild(playerDisp);
   turnPane.appendChild(passButton);
   statusPane.appendChild(turnPane);
+  statusPane.insertBefore(p1ScoreB, turnPane);
+  statusPane.appendChild(p2ScoreB);
   container.appendChild(statusPane);
 }
 
@@ -125,6 +149,26 @@ var initGame = function () {
 };
 
 // Turn-related helper functions
+var updateScore = function () {
+  player1.score = 0;
+  player2.score = 0;
+  var squares = document.querySelectorAll(".square");
+  for (var i = 0; i < squares.length; i++) {
+    var square = squares[i];
+    if (square.firstChild === null) {
+      continue;
+    } else if (square.firstChild.classList.contains("black")) {
+      player1.score++;
+    } else {
+      player2.score++;
+    }
+
+    var p1Score = document.querySelector("#p1-score");
+    p1Score.innerText = player1.score;
+    var p2Score = document.querySelector("#p2-score");
+    p2Score.innerText = player2.score;
+  }
+};
 
 var getValidSquares = function () {
   var validSquares = document.querySelectorAll(".valid");
@@ -237,13 +281,42 @@ var makePiece = function (colour) {
   return piece;
 };
 
+var flashSquare = function (squareObj) {
+  squareObj.classList.add("flash");
+  setTimeout (function () { squareObj.classList.remove("flash"); }, 2500)
+  return;
+};
+
+var displayAlert = function (str) {
+};
+
 var changePlayer = function () {
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
   document.querySelector("#current-player").innerText = currentPlayer.colour;
   findValidSquares();
 
+  checkGame();
 };
 
+var checkGame = function () {
+  var validSquares = getValidSquares();
+  if (validSquares.length === 0) {
+    console.log("no valid moves, skip turn");
+    skipped.push(currentPlayer);
+    if (skipped.length < 2) {
+      changePlayer();
+      return;
+    } else {
+      console.log("game over, no valid moves");
+      if (p1.score > p2.score) {
+        console.log(`Winner: ${player1.color}, ${player1.score} pieces.`);
+      } else if (p2.score > p1.score) {
+        console.log(`Winner: ${player2.color}, ${player2.score} pieces.`);
+      } else {
+        console.log("Draw!");
+      }
+    }
+  }
 };
 
 // main turn function
@@ -270,6 +343,9 @@ var playTurnAt = function (squareObj) {
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
 
+  // TODO: fix this taking too slow if many pieces are flipped
+  // set data attributes instead of animations?
+  setTimeout(updateScore, 500);
 
   unsetValidSquares();
   setTimeout(changePlayer, 1000);
