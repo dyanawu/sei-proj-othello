@@ -288,9 +288,12 @@ var flashSquare = function (squareObj) {
 };
 
 var displayAlert = function (str) {
+  //TODO make a friendly display to replace console.log
 };
 
 var changePlayer = function () {
+  unsetValidSquares();
+
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
   document.querySelector("#current-player").innerText = currentPlayer.colour;
   findValidSquares();
@@ -308,10 +311,10 @@ var checkGame = function () {
       return;
     } else {
       console.log("game over, no valid moves");
-      if (p1.score > p2.score) {
-        console.log(`Winner: ${player1.color}, ${player1.score} pieces.`);
-      } else if (p2.score > p1.score) {
-        console.log(`Winner: ${player2.color}, ${player2.score} pieces.`);
+      if (player1.score > player2.score) {
+        console.log(`Winner: ${player1.colour}, ${player1.score} pieces.`);
+      } else if (player2.score > player1.score) {
+        console.log(`Winner: ${player2.colour}, ${player2.score} pieces.`);
       } else {
         console.log("Draw!");
       }
@@ -343,11 +346,10 @@ var playTurnAt = function (squareObj) {
   var piece = makePiece(currentPlayer.colour);
   playedSquare.appendChild(piece);
 
-  // TODO: fix this taking too slow if many pieces are flipped
+  // TODO: fix this taking too slow if many pieces are flipped concurrently
   // set data attributes instead of animations?
   setTimeout(updateScore, 500);
 
-  unsetValidSquares();
   setTimeout(changePlayer, 1000);
 };
 
