@@ -40,12 +40,14 @@ var gameState = [];
 
 var player1 = {
   colour: "black",
-  score: 0
+  score: 0,
+  mode: "human"
 };
 
 var player2 = {
   colour: "white",
-  score: 0
+  score: 0,
+  mode: "human"
 };
 
 var currentPlayer = player1;
@@ -115,6 +117,20 @@ var makeStatusPane = function () {
     score.id = id + "-score";
     score.innerText = `${player.score}`;
     scoreB.appendChild(score);
+
+    var checkContainer = document.createElement("label");
+    checkContainer.classList.add("check-cont");
+    checkContainer.innerText = "autoplay";
+    var checkBox = document.createElement("input");
+    checkBox.id = `${id}-auto`;
+    checkBox.type = "checkbox";
+    checkBox.checked = "";
+    var check = document.createElement("span");
+    check.classList.add("checkmark");
+
+    checkContainer.appendChild(checkBox);
+    checkContainer.appendChild(check);
+    scoreB.appendChild(checkContainer);
 
     return scoreB;
   }
