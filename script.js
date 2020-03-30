@@ -13,6 +13,7 @@
 // friendly modal to display info
 // random autoplay (button only)
 // add game reset button
+// random autoplay (via checkbox setting)
 
 // further TODO
 // css flip in direction of play
@@ -348,6 +349,7 @@ var flashSquare = function (squareObj) {
   return;
 };
 
+//TODO timeout modal
 var displayAlert = function (str, colour) {
   var modal = document.querySelector(".modal");
   if (modal.firstChild !== null) {
