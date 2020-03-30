@@ -11,9 +11,6 @@
 // skip a player's moves if they have no valid moves
 // track current score, report win
 
-// TOFIX:
-// score reporting lag
-
 // further TODO
 // css flip in direction of play
 
