@@ -12,6 +12,7 @@
 // track current score, report win
 // friendly modal to display info
 // random autoplay (button only)
+// add game reset button
 
 // further TODO
 // css flip in direction of play
@@ -155,6 +156,17 @@ var initGame = function () {
     }
   }
 };
+
+var setup = function () {
+  document.body.innerHTML = "";
+  emptyGame();
+  makeBoard();
+  makeStatusPane();
+  initGame();
+  findValidSquares();
+  console.log("Game State: ", gameState);
+}
+
 
 // Turn-related helper functions
 var updateScore = function () {
@@ -336,21 +348,33 @@ var checkGame = function () {
       changePlayer();
       return;
     } else {
-      var outStr = "Game over, no more valid moves.";
-
-      if (player1.score > player2.score) {
-        outStr += `\nWinner: ${player1.colour}, ${player1.score} pieces.`;
-      } else if (player2.score > player1.score) {
-        outStr += `\nWinner: ${player2.colour}, ${player2.score} pieces.`;
-      } else {
-        outStr += "\nGame ended in a draw.";
-      }
-
-      displayAlert(outStr, "lightblue");
+      endGame();
     }
   }
 };
 
+var endGame = function () {
+  var squares = document.querySelectorAll(".square");
+  for (var i = 0; i < squares.length; i++) {
+    squares[i].removeEventListener("click", playTurnAt);
+  }
+  var button = document.querySelector("#button-dwim");
+  button.removeEventListener("click", autoPlay);
+
+  button.innerText = "Reset Game";
+  button.style.backgroundColor = "lightblue";
+  button.addEventListener("click", setup);
+
+  var outStr = "Game over!";
+  if (player1.score > player2.score) {
+    outStr += `\nWinner: ${player1.colour}, ${player1.score} pieces.`;
+  } else if (player2.score > player1.score) {
+    outStr += `\nWinner: ${player2.colour}, ${player2.score} pieces.`;
+  } else {
+    outStr += "\nGame ended in a draw.";
+  }
+  displayAlert(outStr, "lightblue");
+}
 
 var autoPlay = function () {
   var squares = getValidSquares();
@@ -396,12 +420,5 @@ var playTurnAt = function (squareObj) {
 //Set up an empty grid and game on page load
 document.addEventListener(
   "DOMContentLoaded",
-  function setup () {
-    emptyGame();
-    makeBoard();
-    makeStatusPane();
-    initGame();
-    findValidSquares();
-    console.log(gameState);
-  }
+  setup
 );
