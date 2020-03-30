@@ -136,8 +136,8 @@ Styling for game pieces
 }
 
 .piece-black, .piece-white {
-  width: 80%;
-  height: 80%;
+  width: 75%;
+  height: 75%;
 
   position: absolute;
   -webkit-backface-visibility: hidden;
@@ -147,14 +147,14 @@ Styling for game pieces
 .piece-black {
   box-sizing: border-box;
   background-color: black;
-  border-radius: 80%;
+  border-radius: 75%;
 }
 
 .piece-white {
   box-sizing: border-box;
   background-color: white;
   border: 7px solid black;
-  border-radius: 80%;
+  border-radius: 75%;
 
   transform: rotateY(180deg);
 }
