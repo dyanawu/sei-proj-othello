@@ -140,9 +140,11 @@ var initGame = function () {
     console.log(`row ${r}, col ${c}`);
     if (i === 0 || i === 3) {
       var piece = makePiece("white");
+      square.dataset.colour = "white";
       square.appendChild(piece);
     } else {
       var piece = makePiece("black");
+      square.dataset.colour = "black";
       square.appendChild(piece);
     }
   }
@@ -157,7 +159,7 @@ var updateScore = function () {
     var square = squares[i];
     if (square.firstChild === null) {
       continue;
-    } else if (square.firstChild.classList.contains("black")) {
+    } else if (square.dataset.colour === "black") {
       player1.score++;
     } else {
       player2.score++;
@@ -255,8 +257,9 @@ var flipPiece = function (pc) {
 var flipSquares = function (sqArr) {
   var pcArr = [];
   for (var sq = 0; sq < sqArr.length; sq++) {
-    var pc = gameState[sqArr[sq][0]][sqArr[sq][1]];
-    pcArr.push(pc.firstChild);
+    var square = gameState[sqArr[sq][0]][sqArr[sq][1]];
+    square.dataset.colour = currentPlayer.colour;
+    pcArr.push(square.firstChild);
   }
   for (var i = 0; i < pcArr.length; i++) {
     setTimeout(flipPiece, i * 300, pcArr[i]);
@@ -344,11 +347,10 @@ var playTurnAt = function (squareObj) {
   }
 
   var piece = makePiece(currentPlayer.colour);
+  playedSquare.dataset.colour = currentPlayer.colour;
   playedSquare.appendChild(piece);
 
-  // TODO: fix this taking too slow if many pieces are flipped concurrently
-  // set data attributes instead of animations?
-  setTimeout(updateScore, 500);
+  updateScore();
 
   setTimeout(changePlayer, 1000);
 };
