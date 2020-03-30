@@ -146,8 +146,8 @@ var makeStatusPane = function () {
 
   var autoButton = document.createElement("button");
   autoButton.id = "button-dwim";
-  autoButton.addEventListener("click", autoPlay);
-  autoButton.innerText = "Play this turn for me";
+  autoButton.addEventListener("click", startGame);
+  autoButton.innerText = "Start game";
   turnPane.appendChild(autoButton);
 
   statusPane.appendChild(turnPane);
@@ -187,6 +187,18 @@ var setup = function () {
   console.log("Game State: ", gameState);
 }
 
+var startGame = function () {
+  player1.mode = document.querySelector("#p1-auto").checked ? "auto" : "human";
+  player2.mode = document.querySelector("#p2-auto").checked ? "auto" : "human";
+  console.log("STARTO");
+
+  document.querySelector("#p1-auto").disabled = true;
+  document.querySelector("#p2-auto").disabled = true;
+
+  if (player1.mode === "auto") {
+    autoPlay();
+  }
+}
 
 // Turn-related helper functions
 var clickHandler = function () {
@@ -406,10 +418,13 @@ var endGame = function () {
 
 var autoPlay = function () {
   var squares = getValidSquares();
+  if (squares.length === 0) {
+    return;
+  }
   var i = Math.floor(Math.random() * squares.length);
   squareToPlay = squares[i];
 
-  playTurnAt(squareToPlay);
+  setTimeout(playTurnAt, 800, squareToPlay);
 }
 
 // main turn function
@@ -439,6 +454,9 @@ var playTurnAt = function (squareObj) {
 
   updateScore();
   changePlayer();
+  if (currentPlayer.mode === "auto") {
+    autoPlay();
+  }
 };
 
 //Set up an empty grid and game on page load
