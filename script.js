@@ -37,7 +37,7 @@ const STARTPOINTS = [
   [4, 4]
 ];
 
-const autoplayDelay = 200;
+const AUTODELAY = 900; // delay before autoplay moves
 
 var gridSize = 8; // defined here so there's room to grow maybe
 var gameState = [];
@@ -486,7 +486,7 @@ var autoPlay = function () {
   }
   var i = Math.floor(Math.random() * squares.length);
   squareToPlay = squares[i];
-  setTimeout(playTurnAt, autoplayDelay, squareToPlay);
+  setTimeout(playTurnAt, AUTODELAY, squareToPlay);
 }
 
 // main turn function
