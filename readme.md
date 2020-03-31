@@ -1,6 +1,9 @@
 ## Single-page Othello
 
 1. Technologies used
+
+   This project was written in HTML/CSS/JavaScript.
+
 2. Approach taken
 
     I had some existing knowledge coming into this - we'd already made a tictactoe game for homework, so I know at least that I can generate a grid of game cells, with coordinates as data attributes. This also means I can store the game state in an array of arrays, and look up the state of a given cell.
@@ -18,7 +21,7 @@
 
     c. Bring in my existing tictactoe grid generation function and modify it to generate the Othello grid instead
 
-    I also updated the game state storage AoA to store object references to the created squares on the grid, instead of just strings representing the owner of the square. This greatly reduced the number of `querySelector`s I had to use throughout the rest of the code, since I could now refer to any cell node object (and hence manipulate it) on the grid with `gameState[r][c]` where `r` was the data attribute `row`, and `c` the data attribute `col`, populated during grid creation.
+    I also updated the game state storage AoA to store object references to the created squares on the grid, instead of just strings representing the owner of the square. This greatly reduced the number of `querySelector`s I had to use throughout the rest of the code, since I could now refer to any cell node object (and hence manipulate it) on the grid with `gameState[r][c]` where `r` was the data attribute `row`, and `c` the data attribute `col`, populated during grid creation. (_If I want to work on the entire grid, it's actually easier to `querySelectorAll` the squares, then loop once over that resulting array. It's still 64 operations either way, but at least if I break something in this loop it's easier to debug with just one counter variable!_)
 
     d. Build game functionality
 
@@ -33,10 +36,11 @@
 
        - repeat above, for each direction (8 directions in total)
 
-
     Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
 
-    This is great! But now I have another problem: what if a player just does not have any valid moves left? Okay, that's trivial enough to detect - I can grab all pieces marked valid previously, and if that's a 0-length list, clearly a player is stuck. I then mark that player as having skipped their turn, and change over.
+    This was pretty excellent. But now I had another problem: what if a player just didn't have any valid moves left? Okay, that would be trivial enough to detect - I could grab all pieces marked valid previously, and if that was a 0-length list, clearly a player is stuck. I could then skip that player's turn with the same player change mechanism as for alternating inputs. If I have to change over for both players without any moves being made in the meantime, then the game would be over and I could proceed to announce a winner.
+
+    A pretty enjoyable thing to implement once there's an ability to find valid moves is an autoplay - not an intelligent one, just a random one. All this takes is `Math.random()`-ly selecting a valid square to play on, then calling the usual turn function. (_Side and entertaining note: setting `const AUTODELAY` to 0 and both players to autoplay makes for an instantaneous game. Potential applications in screensaver generation?_)
 
 3. Install instructions
 
@@ -44,4 +48,4 @@
 
 4. Unsolved problems
 
-    Finding all possible move locations and validity
+    I originally really wanted to make pieces flip in the direction of play (i.e., away from the played piece), but this turned out to be really involved. The last thing I tried was using CSS animations instead of transitions, which _sort_ of worked, but turned out pretty glitchy. An partial implementation of directional flipping (one direction only) can be found in the `css-foolery` branch.
