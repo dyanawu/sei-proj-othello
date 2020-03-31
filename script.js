@@ -85,7 +85,6 @@ var makeBoard = function () {
       square.dataset.col = `${c}`;
       gameState[r][c] = square;
       gameboard.appendChild(square);
-      square.addEventListener("click", clickHandler);
     }
   }
   container.appendChild(gameboard);
@@ -93,11 +92,11 @@ var makeBoard = function () {
   document.body.appendChild(container);
 };
 
-var makeStatusPane = function () {
+var makecontrolPanel = function () {
   var container = document.querySelector("#game-container");
 
-  var statusPane = document.createElement("div");
-  statusPane.id = "game-statuspane";
+  var controlPanel = document.createElement("div");
+  controlPanel.id = "game-controlpanel";
 
   var turnPane = document.createElement("div");
   turnPane.id = "status-turn";
@@ -145,16 +144,26 @@ var makeStatusPane = function () {
   // passButton.innerText = "Pass turn";
   // turnPane.appendChild(passButton);
 
-  var autoButton = document.createElement("button");
-  autoButton.id = "button-dwim";
-  autoButton.addEventListener("click", startGame);
-  autoButton.innerText = "Start game";
-  turnPane.appendChild(autoButton);
+  var buttonContainer = document.createElement("div");
+  buttonContainer.id = "button-cont";
 
-  statusPane.appendChild(turnPane);
-  statusPane.insertBefore(p1ScoreB, turnPane);
-  statusPane.appendChild(p2ScoreB);
-  container.appendChild(statusPane);
+  var gameButton = document.createElement("button");
+  gameButton.id = "button-dwim";
+  gameButton.addEventListener("click", startGame);
+  gameButton.innerText = "Start game";
+  buttonContainer.appendChild(gameButton);
+
+  var hintButton = document.createElement("button");
+  hintButton.id = "button-hint";
+  hintButton.addEventListener("click", toggleHints);
+  hintButton.innerText = "Hints: " + (hints ? "ON" : "OFF");
+  buttonContainer.appendChild(hintButton);
+
+  turnPane.appendChild(buttonContainer);
+  controlPanel.appendChild(turnPane);
+  controlPanel.insertBefore(p1ScoreB, turnPane);
+  controlPanel.appendChild(p2ScoreB);
+  container.appendChild(controlPanel);
 }
 
 var initGame = function () {
@@ -182,19 +191,34 @@ var setup = function () {
 
   emptyGame();
   makeBoard();
-  makeStatusPane();
+  makecontrolPanel();
   initGame();
   findValidSquares();
   console.log("Game State: ", gameState);
 }
 
 var startGame = function () {
-  player1.mode = document.querySelector("#p1-auto").checked ? "auto" : "human";
-  player2.mode = document.querySelector("#p2-auto").checked ? "auto" : "human";
+  var squares = document.querySelectorAll(".square");
+  for (var i = 0; i < squares.length; i++) {
+    squares[i].addEventListener("click", clickHandler);
+  }
+
+  var button = document.querySelector("#button-dwim");
+  button.removeEventListener("click", startGame);
+
+  button.innerText = "Reset Game";
+  button.addEventListener("click", setup);
+
+  var p1Check = document.querySelector("#p1-auto");
+  var p2Check = document.querySelector("#p2-auto");
+  player1.mode = p1Check.checked ? "auto" : "human";
+  player2.mode = p2Check.checked ? "auto" : "human";
   console.log("STARTO");
 
-  document.querySelector("#p1-auto").disabled = true;
-  document.querySelector("#p2-auto").disabled = true;
+  p1Check.disabled = true;
+  p1Check.parentElement.classList.add("disabled");
+  p2Check.disabled = true;
+  p2Check.parentElement.classList.add("disabled");
 
   if (player1.mode === "auto") {
     autoPlay();
@@ -398,14 +422,8 @@ var checkGame = function () {
 var endGame = function () {
   var squares = document.querySelectorAll(".square");
   for (var i = 0; i < squares.length; i++) {
-    squares[i].removeEventListener("click", playTurnAt);
+    squares[i].removeEventListener("click", clickHandler);
   }
-  var button = document.querySelector("#button-dwim");
-  button.removeEventListener("click", autoPlay);
-
-  button.innerText = "Reset Game";
-  button.style.backgroundColor = "lightblue";
-  button.addEventListener("click", setup);
 
   var outStr = "Game over!";
   if (player1.score > player2.score) {

@@ -25,7 +25,7 @@ body {
   height: 720px;
 }
 
-#game-statuspane {
+#game-controlpanel {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -61,16 +61,22 @@ body {
   font-size: 45px;
 }
 
-#status-turn button {
+#button-cont {
+  display: flex;
+  flex-flop: row wrap;
+  justify-content: space-around;
+  align-content: center;
+}
+
+button {
   font-family: inherit;
   font-weight: bold;
   font-size: 16px;
   text-align: center;
   text-transform: uppercase;
 
-  width: 250px;
+  width: 180px;
   height: 40px;
-  margin: 0 auto;
   padding: 5px;
 
   background-color: white;
@@ -80,7 +86,7 @@ body {
   transition-duration: 0s;
 }
 
-#status-turn button:hover {
+button:hover {
   border-top: 2px solid black;
   border-right: 2px solid black;
   border-left: 2px solid black;
@@ -142,14 +148,24 @@ body {
   box-sizing: border-box;
 }
 
-/* On mouse-over, add a grey background color */
 .check-cont:hover input ~ .checkmark {
   background-color: #ddd;
 }
 
-/* When the checkbox is checked, add a blue background */
 .check-cont input:checked ~ .checkmark {
   background-color: #aaa;
+}
+
+.check-cont.disabled {
+  color: lightgrey;
+}
+
+.check-cont.disabled:hover input ~ .checkmark {
+  background-color: unset;
+}
+
+.check-cont.disabled .checkmark {
+  border: 2px lightgrey dotted;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
