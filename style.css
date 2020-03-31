@@ -282,7 +282,7 @@ Styling for game pieces
   justify-content: center;
 
   background-color: transparent;
-  transition: transform 0.8s linear;
+/*  transition: transform 0.8s linear;*/
   transform-style: preserve-3d;
 }
 
@@ -314,6 +314,35 @@ Styling for game pieces
   background-color: white;
   border: 7px solid black;
   border-radius: 75%;
-
   transform: rotateY(180deg);
 }
+
+.piece.black {
+  transform: rotate3d(-1, -1, 0, 0deg);
+}
+
+.piece.white {
+  transform: rotate3d(-1, -1, 0, 180deg);
+}
+
+@keyframes b2w-we {
+  from {transform: rotateY(180deg);}
+  to {transform: rotateY(360deg);}
+}
+@keyframes w2b-we {
+  from {transform: rotateY(0deg);}
+  to {transform: rotateY(-180deg);}
+}
+
+.piece.black[data-dir="E"] {
+  animation: b2w-we 1s linear;
+  transform: rotateY(0deg);
+}
+
+.piece.white[data-dir="E"] {
+  animation: w2b-we 1s linear;
+  transform: rotateY(180deg);
+}
+
+/* .piece.black[data-dir="W"] */
+/* .piece.white[data-dir="W"] */

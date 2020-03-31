@@ -171,7 +171,7 @@ var makecontrolPanel = function () {
   controlPanel.insertBefore(p1ScoreB, turnPane);
   controlPanel.appendChild(p2ScoreB);
   container.appendChild(controlPanel);
-}
+};
 
 var initGame = function () {
   for (colour in STARTPOINTS) {
@@ -201,7 +201,7 @@ var setup = function () {
   initGame();
   findValidSquares();
   console.log("Game State: ", gameState);
-}
+};
 
 var startGame = function () {
   var squares = document.querySelectorAll(".square");
@@ -229,7 +229,7 @@ var startGame = function () {
   if (player1.mode === "auto") {
     autoPlay();
   }
-}
+};
 
 var toggleHints = function () {
   var hintButton = document.querySelector("#button-hint");
@@ -251,7 +251,7 @@ var toggleHints = function () {
 
   hintButton.innerText = "Hints: " + (hints ? "ON" : "OFF");
 
-}
+};
 
 // Turn-related helper functions
 var clickHandler = function () {
@@ -260,7 +260,7 @@ var clickHandler = function () {
   }
   var clickedSquare = event.target;
   playTurnAt(clickedSquare);
-}
+};
 
 var updateScore = function () {
   player1.score = 0;
@@ -360,12 +360,14 @@ var getPieceObjs = function (objArr) {
   }
 };
 
-var flipPiece = function (pc) {
+var flipPiece = function (pc, dir) {
+  console.log("flipping: ", dir);
+  pc.dataset.dir = dir;
   pc.classList.toggle("white");
   pc.classList.toggle("black");
 };
 
-var flipSquares = function (sqArr) {
+var flipSquares = function (sqArr, dir) {
   var pcArr = [];
   for (var sq = 0; sq < sqArr.length; sq++) {
     var square = gameState[sqArr[sq][0]][sqArr[sq][1]];
@@ -373,7 +375,7 @@ var flipSquares = function (sqArr) {
     pcArr.push(square.firstChild);
   }
   for (var i = 0; i < pcArr.length; i++) {
-    setTimeout(flipPiece, i * 300, pcArr[i]);
+    setTimeout(flipPiece, i * 300, pcArr[i], dir);
   }
 };
 
@@ -479,7 +481,7 @@ var endGame = function () {
     outStr += "\nGame ended in a draw.";
   }
   displayAlert(outStr, "lightblue");
-}
+};
 
 var autoPlay = function () {
   var squares = getValidSquares();
@@ -489,7 +491,7 @@ var autoPlay = function () {
   var i = Math.floor(Math.random() * squares.length);
   squareToPlay = squares[i];
   setTimeout(playTurnAt, autoplayDelay, squareToPlay);
-}
+};
 
 // main turn function
 var playTurnAt = function (squareObj) {
@@ -508,7 +510,7 @@ var playTurnAt = function (squareObj) {
 
   for (dir in squaresToFlip) {
     if (squaresToFlip[dir].length > 0) {
-      flipSquares(squaresToFlip[dir]);
+      flipSquares(squaresToFlip[dir], dir);
     }
   }
 
