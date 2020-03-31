@@ -61,7 +61,8 @@ let player2 = {
 let currentPlayer = player1;
 let hints = true;
 let skipped = [];
-let timerId;
+let displayTimerId;
+let autoTimerId;
 
 // General game setup helper functions
 let makeBoard = function () {
@@ -196,11 +197,11 @@ let setup = function () {
 };
 
 let resetGame = function () {
+  clearTimeout(autoTimerId);
   player1.mode = "human";
   player2.mode = "human";
-  displayAlert("Resetting...", "lightpink", 1000);
 
-  setTimeout(setup, 1000);
+  setup();
 };
 
 let startGame = function () {
@@ -284,12 +285,12 @@ let displayAlert = function (str, colour, timeout) {
   modalContent.style.border = `92px solid ${colour}`;
   modal.style.display = "block";
 
-  if (timerId) {
-    clearTimeout(timerId);
+  if (displayTimerId) {
+    clearTimeout(displayTimerId);
   }
 
   if (timeout > 0) {
-    timerId = setTimeout(
+    displayTimerId = setTimeout(
       function () {
         modal.style.display = "none";
       },
@@ -480,7 +481,7 @@ let autoPlay = function () {
   }
   let i = Math.floor(Math.random() * squares.length);
   let squareToPlay = squares[i];
-  setTimeout(playTurnAt, AUTODELAY, squareToPlay);
+  autoTimerId = setTimeout(playTurnAt, AUTODELAY, squareToPlay);
 };
 
 // main turn function
