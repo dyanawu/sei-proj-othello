@@ -30,12 +30,16 @@ const VECTORS = {
   NW : { row: -1, col: -1 }
 };
 
-const STARTPOINTS = [
-  [3, 3],
-  [3, 4],
-  [4, 3],
-  [4, 4]
-];
+const STARTPOINTS = {
+  white: [
+    [3, 3],
+    [4, 4]
+  ],
+  black: [
+    [3, 4],
+    [4, 3]
+  ]
+};
 
 const autoplayDelay = 500;
 
@@ -170,16 +174,14 @@ var makecontrolPanel = function () {
 }
 
 var initGame = function () {
-  for (var i = 0; i < 4; i++) {
-    var [r, c] = STARTPOINTS[i];
-    var square = gameState[r][c];
-    if (i === 0 || i === 3) {
-      var piece = makePiece("white");
-      square.dataset.colour = "white";
-      square.appendChild(piece);
-    } else {
-      var piece = makePiece("black");
-      square.dataset.colour = "black";
+  for (colour in STARTPOINTS) {
+    var points = STARTPOINTS[colour];
+    for (var i = 0; i < points.length; i++) {
+      var [r, c] = points[i];
+      var square = gameState[r][c];
+      square.dataset.colour = colour;
+      var piece = makePiece(colour);
+
       square.appendChild(piece);
     }
   }
