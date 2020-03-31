@@ -41,7 +41,7 @@ const STARTPOINTS = {
   ]
 };
 
-const AUTODELAY = 900; // delay before autoplay moves
+const AUTODELAY = 750; // delay before autoplay moves
 
 let gridSize = 8; // defined here so there's room to grow maybe
 
@@ -185,9 +185,7 @@ let setup = function () {
 
   currentPlayer = player1;
   player1.score = 0;
-  player1.mode = "human";
   player2.score = 0;
-  player2.mode = "human";
   hints = true;
 
   emptyGameStateState();
@@ -195,6 +193,14 @@ let setup = function () {
   makecontrolPanel();
   initGame();
   console.log("Game State: ", gameState);
+};
+
+let resetGame = function () {
+  player1.mode = "human";
+  player2.mode = "human";
+  displayAlert("Resetting...", "lightpink", 1000);
+
+  setTimeout(setup, 1000);
 };
 
 let startGame = function () {
@@ -207,7 +213,7 @@ let startGame = function () {
   button.removeEventListener("click", startGame);
 
   button.innerText = "Reset Game";
-  button.addEventListener("click", setup);
+  button.addEventListener("click", resetGame);
 
   let p1Check = document.querySelector("#p1-auto");
   let p2Check = document.querySelector("#p2-auto");
