@@ -40,13 +40,13 @@ var gridSize = 8; // defined here so there's room to grow maybe
 var gameState = [];
 
 var player1 = {
-  colour: "black",
+  colour: "white",
   score: 0,
   mode: "human"
 };
 
 var player2 = {
-  colour: "white",
+  colour: "black",
   score: 0,
   mode: "human"
 };
