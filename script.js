@@ -37,7 +37,7 @@ const STARTPOINTS = [
   [4, 4]
 ];
 
-const autoplayDelay = 200;
+const autoplayDelay = 500;
 
 var gridSize = 8; // defined here so there's room to grow maybe
 var gameState = [];
