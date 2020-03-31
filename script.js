@@ -185,7 +185,9 @@ let setup = function () {
 
   currentPlayer = player1;
   player1.score = 0;
+  player1.mode = "human";
   player2.score = 0;
+  player2.mode = "human";
   hints = true;
 
   emptyGameStateState();
