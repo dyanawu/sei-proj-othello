@@ -229,12 +229,19 @@ var startGame = function () {
 var toggleHints = function () {
   var hintButton = document.querySelector("#button-hint");
   hints = hints ? false : true;
-  
+
   var stylesheets = document.styleSheets[0].cssRules;
+  var index = 0;
+  for ( i in sheets ) {
+    if (sheets[i].selectorText === ".square.valid") {
+      index = i;
+    }
+  }
+
   if (hints) {
-    stylesheets[25].style.backgroundColor = "#e1ffe1";
+    stylesheets[index].style.backgroundColor = "#e1ffe1";
   } else {
-    stylesheets[25].style.backgroundColor = "white";
+    stylesheets[index].style.backgroundColor = "white";
   }
 
   hintButton.innerText = "Hints: " + (hints ? "ON" : "OFF");
