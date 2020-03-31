@@ -44,4 +44,4 @@
 
 4. Unsolved problems
 
-    I originally really wanted to make 
+    I originally really wanted to make pieces flip in the direction of play (i.e., away from the played piece), but this turned out to be really involved.
