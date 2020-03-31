@@ -14,9 +14,9 @@
 // random autoplay (button only)
 // add game reset button
 // random autoplay (via checkbox setting)
+// timeout modal for autoplayer
 
 // further TODO
-// timeout modal for autoplayer
 // css flip in direction of play
 
 const VECTORS = {
@@ -43,50 +43,38 @@ const STARTPOINTS = {
 
 const AUTODELAY = 900; // delay before autoplay moves
 
-var gridSize = 8; // defined here so there's room to grow maybe
-var gameState = [];
+let gridSize = 8; // defined here so there's room to grow maybe
 
-var player1 = {
+let gameState = [];
+
+let player1 = {
   colour: "black",
   score: 0,
   mode: "human"
 };
-var player2 = {
+let player2 = {
   colour: "white",
   score: 0,
   mode: "human"
 };
 
-var currentPlayer = player1;
-var hints = true;
-var skipped = [];
-var timerId;
+let currentPlayer = player1;
+let hints = true;
+let skipped = [];
+let timerId;
 
 // General game setup helper functions
-var emptyGame = function () {
-  skipped = [];
-  gameState = [];
-  for (var r = 0; r < gridSize; r++) {
-    gameState[r] = [];
-    for (var c = 0; c < gridSize; c++) {
-      gameState[r][c] = null;
-    }
-  }
-};
-
-var makeBoard = function () {
-  /* game board = 8*8
-   */
-  var container = document.createElement("div");
+let makeBoard = function () {
+  let container = document.createElement("div");
   container.id = "game-container";
-  var gameboard = document.createElement("div");
+  let gameboard = document.createElement("div");
   gameboard.id = "game-board";
-  var modal = document.createElement("div");
+  let modal = document.createElement("div");
   modal.classList.add("modal");
 
-  for (var r = 0; r <gridSize; r++) {
-    for (var c = 0; c < gridSize; c++) {
-      var square = document.createElement("div");
+  for (let r = 0; r <gridSize; r++) {
+    for (let c = 0; c < gridSize; c++) {
+      let square = document.createElement("div");
       square.classList.add("square");
       square.dataset.row = `${r}`;
       square.dataset.col = `${c}`;
@@ -99,40 +87,40 @@ var makeBoard = function () {
   document.body.appendChild(container);
 };
 
-var makecontrolPanel = function () {
-  var container = document.querySelector("#game-container");
+let makecontrolPanel = function () {
+  let container = document.querySelector("#game-container");
 
-  var controlPanel = document.createElement("div");
+  let controlPanel = document.createElement("div");
   controlPanel.id = "game-controlpanel";
 
-  var turnPane = document.createElement("div");
+  let turnPane = document.createElement("div");
   turnPane.id = "status-turn";
   turnPane.innerHTML = "<h2>Current turn<h2>";
 
-  var playerDisp = document.createElement("h1");
+  let playerDisp = document.createElement("h1");
   playerDisp.id = "current-player";
   playerDisp.innerText = currentPlayer.colour;
   turnPane.appendChild(playerDisp);
 
-  var scoreBoard = function (player) {
-    var scoreB = document.createElement("div");
+  let scoreBoard = function (player) {
+    let scoreB = document.createElement("div");
     scoreB.classList.add("score");
     scoreB.innerHTML = `<h2>${player.colour}</h2>`;
 
-    var score = document.createElement("h1");
-    var id = player.colour === "black" ? "p1" : "p2";
+    let score = document.createElement("h1");
+    let id = player.colour === "black" ? "p1" : "p2";
     score.id = id + "-score";
     score.innerText = `${player.score}`;
     scoreB.appendChild(score);
 
-    var checkContainer = document.createElement("label");
+    let checkContainer = document.createElement("label");
     checkContainer.classList.add("check-cont");
     checkContainer.innerText = "autoplay";
-    var checkBox = document.createElement("input");
+    let checkBox = document.createElement("input");
     checkBox.id = `${id}-auto`;
     checkBox.type = "checkbox";
     checkBox.checked = "";
-    var check = document.createElement("span");
+    let check = document.createElement("span");
     check.classList.add("checkmark");
 
     checkContainer.appendChild(checkBox);
@@ -140,27 +128,21 @@ var makecontrolPanel = function () {
     scoreB.appendChild(checkContainer);
 
     return scoreB;
-  }
+  };
 
-  var p1ScoreB = scoreBoard(player1);
-  var p2ScoreB = scoreBoard(player2);
+  let p1ScoreB = scoreBoard(player1);
+  let p2ScoreB = scoreBoard(player2);
 
-  //debug mode only
-  // var passButton = document.createElement("button");
-  // passButton.addEventListener("click", changePlayer);
-  // passButton.innerText = "Pass turn";
-  // turnPane.appendChild(passButton);
-
-  var buttonContainer = document.createElement("div");
+  let buttonContainer = document.createElement("div");
   buttonContainer.id = "button-cont";
 
-  var gameButton = document.createElement("button");
+  let gameButton = document.createElement("button");
   gameButton.id = "button-dwim";
   gameButton.addEventListener("click", startGame);
   gameButton.innerText = "Start game";
   buttonContainer.appendChild(gameButton);
 
-  var hintButton = document.createElement("button");
+  let hintButton = document.createElement("button");
   hintButton.id = "button-hint";
   hintButton.addEventListener("click", toggleHints);
   hintButton.innerText = "Hints: " + (hints ? "ON" : "OFF");
@@ -171,23 +153,34 @@ var makecontrolPanel = function () {
   controlPanel.insertBefore(p1ScoreB, turnPane);
   controlPanel.appendChild(p2ScoreB);
   container.appendChild(controlPanel);
-}
+};
 
-var initGame = function () {
-  for (colour in STARTPOINTS) {
-    var points = STARTPOINTS[colour];
-    for (var i = 0; i < points.length; i++) {
-      var [r, c] = points[i];
-      var square = gameState[r][c];
+let emptyGameStateState = function () {
+  skipped = [];
+  gameState = [];
+  for (let r = 0; r < gridSize; r++) {
+    gameState[r] = [];
+    for (let c = 0; c < gridSize; c++) {
+      gameState[r][c] = null;
+    }
+  }
+};
+
+let initGame = function () {
+  for (let colour in STARTPOINTS) {
+    let points = STARTPOINTS[colour];
+    for (let i = 0; i < points.length; i++) {
+      let [r, c] = points[i];
+      let square = gameState[r][c];
       square.dataset.colour = colour;
-      var piece = makePiece(colour);
+      let piece = makePiece(colour);
 
       square.appendChild(piece);
     }
   }
 };
 
-var setup = function () {
+let setup = function () {
   document.body.innerHTML = "";
 
   currentPlayer = player1;
@@ -195,48 +188,48 @@ var setup = function () {
   player2.score = 0;
   hints = true;
 
-  emptyGame();
+  emptyGameStateState();
   makeBoard();
   makecontrolPanel();
   initGame();
-  findValidSquares();
   console.log("Game State: ", gameState);
-}
+};
 
-var startGame = function () {
-  var squares = document.querySelectorAll(".square");
-  for (var i = 0; i < squares.length; i++) {
+let startGame = function () {
+  let squares = document.querySelectorAll(".square");
+  for (let i = 0; i < squares.length; i++) {
     squares[i].addEventListener("click", clickHandler);
   }
 
-  var button = document.querySelector("#button-dwim");
+  let button = document.querySelector("#button-dwim");
   button.removeEventListener("click", startGame);
 
   button.innerText = "Reset Game";
   button.addEventListener("click", setup);
 
-  var p1Check = document.querySelector("#p1-auto");
-  var p2Check = document.querySelector("#p2-auto");
+  let p1Check = document.querySelector("#p1-auto");
+  let p2Check = document.querySelector("#p2-auto");
   player1.mode = p1Check.checked ? "auto" : "human";
   player2.mode = p2Check.checked ? "auto" : "human";
-  console.log("STARTO");
 
   p1Check.disabled = true;
   p1Check.parentElement.classList.add("disabled");
   p2Check.disabled = true;
   p2Check.parentElement.classList.add("disabled");
 
+  findValidSquares();
+
   if (player1.mode === "auto") {
     autoPlay();
   }
-}
+};
 
-var toggleHints = function () {
-  var hintButton = document.querySelector("#button-hint");
+let toggleHints = function () {
+  let hintButton = document.querySelector("#button-hint");
   hints = hints ? false : true;
 
-  var stylesheets = document.styleSheets[0].cssRules;
-  var index = 0;
+  let stylesheets = document.styleSheets[0].cssRules;
+  let index = 0;
   for ( i in stylesheets ) {
     if (stylesheets[i].selectorText === ".square.valid") {
       index = i;
@@ -251,23 +244,115 @@ var toggleHints = function () {
 
   hintButton.innerText = "Hints: " + (hints ? "ON" : "OFF");
 
-}
+};
 
-// Turn-related helper functions
-var clickHandler = function () {
+// Utility functions
+let clickHandler = function () {
   if (currentPlayer.mode === "auto") {
     return;
   }
-  var clickedSquare = event.target;
+  let clickedSquare = event.target;
   playTurnAt(clickedSquare);
-}
+};
 
-var updateScore = function () {
+let flashSquare = function (squareObj) {
+  squareObj.classList.add("flash");
+  setTimeout (function () { squareObj.classList.remove("flash"); }, 2500);
+  return;
+};
+
+let displayAlert = function (str, colour, timeout) {
+  let timeoutInt = timeout || 0;
+  let modal = document.querySelector(".modal");
+  if (modal.firstChild !== null) {
+  modal.removeChild(modal.firstChild);
+  }
+
+  let modalContent = document.createElement("div");
+  modalContent.classList.add("modal-content");
+  modalContent.innerHTML = `<p>${str}</p>`;
+
+  modal.appendChild(modalContent);
+  modalContent.style.border = `92px solid ${colour}`;
+  modal.style.display = "block";
+
+  if (timerId) {
+    clearTimeout(timerId);
+  }
+
+  if (timeout > 0) {
+    timerId = setTimeout(
+      function () {
+        modal.style.display = "none";
+      },
+      timeoutInt
+    );
+  }
+
+  window.onclick = function (event) {
+    if (event.target === modal || event.target === modalContent) {
+      modal.style.display = "none";
+    }
+  };
+};
+
+let makePiece = function (colour) {
+  //helper subfunction to make the div for both sides of the image
+  let makeSide = function (colour) {
+    let side = document.createElement("div");
+    side.classList.add(`piece-${colour}`);
+    return side;
+  };
+
+  let piece = document.createElement("div");
+  piece.classList.add("piece");
+  piece.appendChild(makeSide("black"));
+  piece.appendChild(makeSide("white"));
+
+  piece.classList.add((colour === "black") ? "black" : "white" );
+
+  return piece;
+};
+
+// Game state functions
+let checkGame = function () {
+  let validSquares = getValidSquares();
+  if (validSquares.length === 0) {
+    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 750);
+    skipped.push(currentPlayer);
+    if (skipped.length < 2) {
+      changePlayer();
+      return;
+    } else {
+      endGame();
+    }
+  }
+};
+
+let endGame = function () {
+  let squares = document.querySelectorAll(".square");
+  for (let i = 0; i < squares.length; i++) {
+    squares[i].removeEventListener("click", clickHandler);
+  }
+
+  let outStr = "Game over!\n";
+  if (player1.score > player2.score) {
+    outStr += `Winner: ${player1.colour}, ${player1.score} pieces.`;
+  } else if (player2.score > player1.score) {
+    outStr += `Winner: ${player2.colour}, ${player2.score} pieces.`;
+  } else {
+    outStr += "Game ended in a draw.";
+  }
+  displayAlert(outStr, "lightblue");
+};
+
+// Turn-related helper functions
+let updateScore = function () {
   player1.score = 0;
   player2.score = 0;
-  var squares = document.querySelectorAll(".square");
-  for (var i = 0; i < squares.length; i++) {
-    var square = squares[i];
+  let squares = document.querySelectorAll(".square");
+  for (let i = 0; i < squares.length; i++) {
+    let square = squares[i];
     if (square.firstChild === null) {
       continue;
     } else if (square.dataset.colour === "black") {
@@ -276,65 +361,65 @@ var updateScore = function () {
       player2.score++;
     }
 
-    var p1Score = document.querySelector("#p1-score");
+    let p1Score = document.querySelector("#p1-score");
     p1Score.innerText = player1.score;
-    var p2Score = document.querySelector("#p2-score");
+    let p2Score = document.querySelector("#p2-score");
     p2Score.innerText = player2.score;
   }
 };
 
-var getValidSquares = function () {
-  var validSquares = document.querySelectorAll(".valid");
-  return validSquares;
-};
-
-var unsetValidSquares = function () {
-  var validSquares = getValidSquares();
-  for (var i = 0; i < validSquares.length; i++) {
-    validSquares[i].classList.remove("valid");
-  }
-  return;
-};
-
-var findValidSquares = function () {
-  var squares = document.querySelectorAll(".square");
-  for (var i = 0; i < squares.length; i++) {
-    checkSq = squares[i];
+let findValidSquares = function () {
+  let squares = document.querySelectorAll(".square");
+  for (let i = 0; i < squares.length; i++) {
+    let checkSq = squares[i];
 
     // if the square is taken, it can't be played
     if (checkSq.firstChild !==null) {
       continue;
     }
-    var squaresToFlip = {};
-    for (dir in VECTORS) {
+    let squaresToFlip = {};
+    for (let dir in VECTORS) {
       squaresToFlip[dir] = findSquaresToFlip(checkSq, VECTORS[dir]);
     }
 
-    for (dir in squaresToFlip) {
+    for (let dir in squaresToFlip) {
       if (squaresToFlip[dir].length > 0) {
         checkSq.classList.add("valid");
       }
     }
   }
-}
+};
 
-var findSquaresToFlip = function (squareObj, vec) {
-  var squaresToFlip = [];
-  var row = Number(squareObj.dataset.row);
-  var col = Number(squareObj.dataset.col);
+let getValidSquares = function () {
+  let validSquares = document.querySelectorAll(".valid");
+  return validSquares;
+};
+
+let unsetValidSquares = function () {
+  let validSquares = getValidSquares();
+  for (let i = 0; i < validSquares.length; i++) {
+    validSquares[i].classList.remove("valid");
+  }
+  return;
+};
+
+let findSquaresToFlip = function (squareObj, vec) {
+  let squaresToFlip = [];
+  let row = Number(squareObj.dataset.row);
+  let col = Number(squareObj.dataset.col);
 
   //row and column to search in
-  var sRow = row + vec.row;
-  var sCol = col + vec.col;
+  let sRow = row + vec.row;
+  let sCol = col + vec.col;
 
   //for now, player and opponent colours
-  var pColour = currentPlayer.colour;
-  var oColour = (pColour === "black" ? "white" : "black");
+  let pColour = currentPlayer.colour;
+  let oColour = (pColour === "black" ? "white" : "black");
 
   while ((sRow >= 0 && sRow < gridSize) &&
          (sCol >= 0 && sCol < gridSize)) {
-    var searchSq = gameState[sRow][sCol];
-//    var searchPc = searchSq.firstChild;
+    let searchSq = gameState[sRow][sCol];
+//    let searchPc = searchSq.firstChild;
 
     if (searchSq.firstChild === null) {
       return [];
@@ -353,94 +438,24 @@ var findSquaresToFlip = function (squareObj, vec) {
   return [];
 };
 
-var getPieceObjs = function (objArr) {
-  var pcArr = [];
-  for (var i = 0; i < objArr.length; i++) {
-    pcArr.push(objArr[i].firstChild);
-  }
-};
-
-var flipPiece = function (pc) {
-  pc.classList.toggle("white");
-  pc.classList.toggle("black");
-};
-
-var flipSquares = function (sqArr) {
-  var pcArr = [];
-  for (var sq = 0; sq < sqArr.length; sq++) {
-    var square = gameState[sqArr[sq][0]][sqArr[sq][1]];
+let flipSquares = function (sqArr) {
+  let pcArr = [];
+  for (let sq = 0; sq < sqArr.length; sq++) {
+    let square = gameState[sqArr[sq][0]][sqArr[sq][1]];
     square.dataset.colour = currentPlayer.colour;
     pcArr.push(square.firstChild);
   }
-  for (var i = 0; i < pcArr.length; i++) {
+  for (let i = 0; i < pcArr.length; i++) {
     setTimeout(flipPiece, i * 300, pcArr[i]);
   }
 };
 
-var makePiece = function (colour) {
-  //helper subfunction to make the div for both sides of the image
-  var makeSide = function (colour) {
-    var side = document.createElement("div");
-    side.classList.add(`piece-${colour}`);
-    return side;
-  };
-
-  var piece = document.createElement("div");
-  piece.classList.add("piece");
-  piece.appendChild(makeSide("black"));
-  piece.appendChild(makeSide("white"));
-
-  piece.classList.add((colour === "black") ? "black" : "white" );
-
-  return piece;
+let flipPiece = function (pc) {
+  pc.classList.toggle("white");
+  pc.classList.toggle("black");
 };
 
-var flashSquare = function (squareObj) {
-  squareObj.classList.add("flash");
-  setTimeout (function () { squareObj.classList.remove("flash"); }, 2500)
-  return;
-};
-
-var displayAlert = function (str, colour, timeout) {
-  var timeout = timeout || 0;
-  console.log(timeout);
-  var modal = document.querySelector(".modal");
-  if (modal.firstChild !== null) {
-  modal.removeChild(modal.firstChild);
-  }
-
-  var modalContent = document.createElement("div");
-  modalContent.classList.add("modal-content");
-  modalContent.innerHTML = `<p>${str}</p>`;
-
-  modal.appendChild(modalContent);
-  modalContent.style.border = `92px solid ${colour}`;
-  modal.style.display = "block";
-
-  if (timerId) {
-    console.log("CLEAR");
-    clearTimeout(timerId);
-  }
-
-  if (timeout > 0) {
-    console.log("current: ", timerId);
-    timerId = setTimeout(
-      function () {
-        modal.style.display = "none";
-      },
-      timeout
-    );
-    console.log("new: ", timerId);
-  }
-
-  window.onclick = function (event) {
-    if (event.target === modal || event.target === modalContent) {
-      modal.style.display = "none";
-    }
-  }
-};
-
-var changePlayer = function () {
+let changePlayer = function () {
   unsetValidSquares();
 
   currentPlayer = (currentPlayer === player1) ? player2 : player1;
@@ -450,50 +465,19 @@ var changePlayer = function () {
   checkGame();
 };
 
-var checkGame = function () {
-  var validSquares = getValidSquares();
-  if (validSquares.length === 0) {
-    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 750);
-    skipped.push(currentPlayer);
-    if (skipped.length < 2) {
-      changePlayer();
-      return;
-    } else {
-      endGame();
-    }
-  }
-};
-
-var endGame = function () {
-  var squares = document.querySelectorAll(".square");
-  for (var i = 0; i < squares.length; i++) {
-    squares[i].removeEventListener("click", clickHandler);
-  }
-
-  var outStr = "Game over!";
-  if (player1.score > player2.score) {
-    outStr += `\nWinner: ${player1.colour}, ${player1.score} pieces.`;
-  } else if (player2.score > player1.score) {
-    outStr += `\nWinner: ${player2.colour}, ${player2.score} pieces.`;
-  } else {
-    outStr += "\nGame ended in a draw.";
-  }
-  displayAlert(outStr, "lightblue");
-}
-
-var autoPlay = function () {
-  var squares = getValidSquares();
+let autoPlay = function () {
+  let squares = getValidSquares();
   if (squares.length === 0) {
     return;
   }
-  var i = Math.floor(Math.random() * squares.length);
-  squareToPlay = squares[i];
+  let i = Math.floor(Math.random() * squares.length);
+  let squareToPlay = squares[i];
   setTimeout(playTurnAt, AUTODELAY, squareToPlay);
-}
+};
 
 // main turn function
-var playTurnAt = function (squareObj) {
-  var playedSquare = squareObj;
+let playTurnAt = function (squareObj) {
+  let playedSquare = squareObj;
 
   if (!playedSquare.classList.contains("valid")) {
     flashSquare(playedSquare);
@@ -501,18 +485,18 @@ var playTurnAt = function (squareObj) {
   }
 
   skipped = [];
-  var squaresToFlip = {};
-  for (dir in VECTORS) {
+  let squaresToFlip = {};
+  for (let dir in VECTORS) {
     squaresToFlip[dir] = findSquaresToFlip(playedSquare, VECTORS[dir]);
   }
 
-  for (dir in squaresToFlip) {
+  for (let dir in squaresToFlip) {
     if (squaresToFlip[dir].length > 0) {
       flipSquares(squaresToFlip[dir]);
     }
   }
 
-  var piece = makePiece(currentPlayer.colour);
+  let piece = makePiece(currentPlayer.colour);
   playedSquare.dataset.colour = currentPlayer.colour;
   playedSquare.appendChild(piece);
 
