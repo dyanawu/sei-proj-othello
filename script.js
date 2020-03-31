@@ -16,6 +16,7 @@
 // random autoplay (via checkbox setting)
 
 // further TODO
+// timeout modal for autoplayer
 // css flip in direction of play
 
 const VECTORS = {
@@ -397,7 +398,9 @@ var flashSquare = function (squareObj) {
 };
 
 //TODO timeout modal
-var displayAlert = function (str, colour) {
+var displayAlert = function (str, colour, timeout) {
+  var timeout = timeout || 0;
+  console.log(timeout);
   var modal = document.querySelector(".modal");
   if (modal.firstChild !== null) {
   modal.removeChild(modal.firstChild);
@@ -431,7 +434,7 @@ var changePlayer = function () {
 var checkGame = function () {
   var validSquares = getValidSquares();
   if (validSquares.length === 0) {
-    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink");
+    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 1500);
     skipped.push(currentPlayer);
     if (skipped.length < 2) {
       changePlayer();
