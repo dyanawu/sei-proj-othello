@@ -36,7 +36,7 @@
 
     Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
 
-    This is great! But now I have another problem: what if a player just does not have any valid moves left? Okay, that's trivial enough to detect - I can grab all pieces marked valid previously, and if that's a 0-length list, clearly a player is stuck. I then mark that player as having skipped their turn, and change over.
+    This is great! But now I have another problem: what if a player just does not have any valid moves left? Okay, that's trivial enough to detect - I can grab all pieces marked valid previously, and if that's a 0-length list, clearly a player is stuck. I then mark that player as having skipped their turn, and change over. If I have to change over for both players without any moves being made in the meantime, then the game is over.
 
 3. Install instructions
 
@@ -44,4 +44,4 @@
 
 4. Unsolved problems
 
-    Finding all possible move locations and validity
+    I originally really wanted to make 
