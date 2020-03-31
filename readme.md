@@ -7,7 +7,10 @@
 
     a. Skim the rules because I remember being rubbish at this game, confirm being rubbish at this game
 
-    Source: [Masters of Games](https://www.mastersofgames.com/rules/reversi-othello-rules.htm)
+    Source:
+
+    1. [Ultra Board Games](https://www.ultraboardgames.com/othello/game-rules.php)
+    2. [Masters of Games](https://www.mastersofgames.com/rules/reversi-othello-rules.htm)
 
     b. Find out how to flip a single piece and write styles and functions for it elsewhere, then throw it away
 
@@ -33,7 +36,7 @@
 
     Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
 
-    This is great! But now I have another problem: what if a player just does not have any valid moves left? I am not at this stage checking all possible playable squares (that's a TODO), but if a player has all possible moves rejected, the game is now stuck (in software), while the rules say what should happen is that the next player then takes a turn, until the player becomes unstuck. This is temporarily resolved by adding a button that lets players skip moves. Should both players be unable to continue playing, they can just refresh the page ^_^
+    This is great! But now I have another problem: what if a player just does not have any valid moves left? Okay, that's trivial enough to detect - I can grab all pieces marked valid previously, and if that's a 0-length list, clearly a player is stuck. I then mark that player as having skipped their turn, and change over.
 
 3. Install instructions
 
