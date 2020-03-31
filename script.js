@@ -52,7 +52,7 @@ var player2 = {
 };
 
 var currentPlayer = player1;
-
+var hints = true;
 var skipped = [];
 
 // General game setup helper functions
@@ -188,6 +188,7 @@ var setup = function () {
   currentPlayer = player1;
   player1.score = 0;
   player2.score = 0;
+  hints = true;
 
   emptyGame();
   makeBoard();
@@ -223,6 +224,21 @@ var startGame = function () {
   if (player1.mode === "auto") {
     autoPlay();
   }
+}
+
+var toggleHints = function () {
+  var hintButton = document.querySelector("#button-hint");
+  hints = hints ? false : true;
+  
+  var stylesheets = document.styleSheets[0].cssRules;
+  if (hints) {
+    stylesheets[25].style.backgroundColor = "#e1ffe1";
+  } else {
+    stylesheets[25].style.backgroundColor = "white";
+  }
+
+  hintButton.innerText = "Hints: " + (hints ? "ON" : "OFF");
+
 }
 
 // Turn-related helper functions
