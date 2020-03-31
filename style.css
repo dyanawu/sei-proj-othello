@@ -34,7 +34,7 @@ body {
   box-sizing: border-box;
   border: 3px black solid;
   width: 100%;
-  height: 140px;
+  height: 150px;
   margin-top: 10px;
 }
 
@@ -42,7 +42,7 @@ body {
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-evenly;
-  align-content: space-between;
+  align-content: space-around;
 
   border-left: 3px black solid;
   border-right: 3px black solid;
@@ -54,11 +54,15 @@ body {
 #status-turn h1,h2 {
   text-align: center;
   text-transform: uppercase;
-  margin: 0;
 }
 
 #status-turn h1 {
   font-size: 45px;
+  margin: 0;
+}
+
+#status-turn h2 {
+  margin: 5px 0 -9px 0;
 }
 
 #button-cont {
@@ -94,19 +98,24 @@ button:hover {
 }
 
 .score {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-content: center;
   width: 22%;
   text-align: center;
 }
 
-.score h1 {
-  font-size: 60px;
+.score h1, h2 {
   margin: 0;
 }
 
+.score h1 {
+  font-size: 55px;
+}
+
 .score h2 {
-  font-size: 30px;
-  margin: 0;
-  margin-top: 7px;
+  font-size: 28px;
 }
 
 .score br {
@@ -117,7 +126,6 @@ button:hover {
   display: block;
   position: relative;
   padding-left: 24px;
-  margin-bottom: 35px;
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
