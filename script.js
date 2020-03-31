@@ -37,6 +37,8 @@ const STARTPOINTS = [
   [4, 4]
 ];
 
+const autoplayDelay = 200;
+
 var gridSize = 8; // defined here so there's room to grow maybe
 var gameState = [];
 
@@ -45,7 +47,6 @@ var player1 = {
   score: 0,
   mode: "human"
 };
-
 var player2 = {
   colour: "white",
   score: 0,
@@ -55,6 +56,7 @@ var player2 = {
 var currentPlayer = player1;
 var hints = true;
 var skipped = [];
+var timerId;
 
 // General game setup helper functions
 var emptyGame = function () {
@@ -397,7 +399,6 @@ var flashSquare = function (squareObj) {
   return;
 };
 
-//TODO timeout modal
 var displayAlert = function (str, colour, timeout) {
   var timeout = timeout || 0;
   console.log(timeout);
@@ -413,6 +414,22 @@ var displayAlert = function (str, colour, timeout) {
   modal.appendChild(modalContent);
   modalContent.style.border = `92px solid ${colour}`;
   modal.style.display = "block";
+
+  if (timerId) {
+    console.log("CLEAR");
+    clearTimeout(timerId);
+  }
+
+  if (timeout > 0) {
+    console.log("current: ", timerId);
+    timerId = setTimeout(
+      function () {
+        modal.style.display = "none";
+      },
+      timeout
+    );
+    console.log("new: ", timerId);
+  }
 
   window.onclick = function (event) {
     if (event.target === modal || event.target === modalContent) {
@@ -434,7 +451,7 @@ var changePlayer = function () {
 var checkGame = function () {
   var validSquares = getValidSquares();
   if (validSquares.length === 0) {
-    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 1500);
+    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 750);
     skipped.push(currentPlayer);
     if (skipped.length < 2) {
       changePlayer();
@@ -469,8 +486,7 @@ var autoPlay = function () {
   }
   var i = Math.floor(Math.random() * squares.length);
   squareToPlay = squares[i];
-
-  setTimeout(playTurnAt, 800, squareToPlay);
+  setTimeout(playTurnAt, autoplayDelay, squareToPlay);
 }
 
 // main turn function
