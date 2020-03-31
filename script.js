@@ -232,8 +232,8 @@ var toggleHints = function () {
 
   var stylesheets = document.styleSheets[0].cssRules;
   var index = 0;
-  for ( i in sheets ) {
-    if (sheets[i].selectorText === ".square.valid") {
+  for ( i in stylesheets ) {
+    if (stylesheets[i].selectorText === ".square.valid") {
       index = i;
     }
   }
