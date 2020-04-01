@@ -40,9 +40,9 @@
 
           - repeat above, for each direction (8 directions in total)
 
-    <img src="./img/vectors.png" width="300">
-    <img src="./img/func.png" width="300">
-    <img src="./img/func2.png" width="300">
+    <a href="./img/vectors.png"><img src="./img/vectors.png" width="250"></a>
+    <a href="./img/func.png"><img src="./img/func.png" width="250"></a>
+    <a href="./img/func2.png"><img src="./img/func2.png" width="250"></a>
 
     Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
 
