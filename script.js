@@ -41,7 +41,7 @@ const STARTPOINTS = {
   ]
 };
 
-const AUTODELAY = 750; // delay before autoplay moves
+let AUTODELAY = 750; // delay before autoplay moves (editable for demos)
 
 let gridSize = 8; // defined here so there's room to grow maybe
 
