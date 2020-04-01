@@ -26,7 +26,9 @@
 
 4. Build game functionality
 
-    As it turned out, placing pieces was not too difficult, just `appendChild` piece `div`s into each game cell object in `gameState`. Alternating between inputs was also simple enough, by keeping `currentPlayer` updated on each turn played. The detection of invalid moves basically was the same algorithm as for finding opponent pieces to flip:
+    As it turned out, placing pieces was not too difficult, just `appendChild` piece `div`s into each game cell object in `gameState`. Alternating between inputs was also simple enough, by keeping `currentPlayer` updated on each turn played.
+
+    The detection of invalid moves basically was the same algorithm as for finding opponent pieces to flip:
 
         - given an origin and a vector (representing the number of rows/columns to move for each step):
           - search in the next square according to the vector
@@ -37,6 +39,10 @@
             - if own piece is encountered, end search and return whatever was previously recorded
 
           - repeat above, for each direction (8 directions in total)
+
+    ![paper prototype 1](./img/paper_1.jpg | width=100)
+    ![paper prototype 2](./img/paper_2.jpg | width=100)
+    ![paper prototype 3](./img/paper_3.jpg | width=100)
 
     Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
 
