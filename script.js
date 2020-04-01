@@ -156,7 +156,7 @@ let makecontrolPanel = function () {
   container.appendChild(controlPanel);
 };
 
-let emptyGameStateState = function () {
+let emptyGameState = function () {
   skipped = [];
   gameState = [];
   for (let r = 0; r < gridSize; r++) {
@@ -189,7 +189,7 @@ let setup = function () {
   player2.score = 0;
   hints = true;
 
-  emptyGameStateState();
+  emptyGameState();
   makeBoard();
   makecontrolPanel();
   initGame();
