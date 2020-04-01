@@ -34,18 +34,15 @@ Please answer the following questions. Take at least 30 minutes to prepare.
 
     _I'd like to move away from using setTimeout(). Using Promises in the two functions below might allow for a user's chain of flips to complete before the next move could be made._
 
-        let flipSquares = function (sqArr) {
-          let pcArr = [];
-          for (let sq = 0; sq < sqArr.length; sq++) {
-            let square = gameState[sqArr[sq][0]][sqArr[sq][1]];
-            square.dataset.colour = currentPlayer.colour;
-            pcArr.push(square.firstChild);
+        let autoPlay = function () {
+          let squares = getValidSquares();
+          if (squares.length === 0) {
+            return;
           }
-          for (let i = 0; i < pcArr.length; i++) {
-            setTimeout(flipPiece, i * 300, pcArr[i]);
-          }
+          let i = Math.floor(Math.random() * squares.length);
+          let squareToPlay = squares[i];
+          autoTimerId = setTimeout(playTurnAt, AUTODELAY, squareToPlay);
         };
-
 
         let flipSquares = function (sqArr) {
           let pcArr = [];
