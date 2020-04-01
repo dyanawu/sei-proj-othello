@@ -327,7 +327,7 @@ let makePiece = function (colour) {
 let checkGame = function () {
   let validSquares = getValidSquares();
   if (validSquares.length === 0) {
-    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 750);
+    displayAlert(`No valid moves for ${currentPlayer.colour}, skipping turn`, "lightpink", 600);
     skipped.push(currentPlayer);
     if (skipped.length < 2) {
       changePlayer();
