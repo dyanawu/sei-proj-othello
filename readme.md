@@ -40,9 +40,7 @@
 
           - repeat above, for each direction (8 directions in total)
 
-    ![paper prototype 1](./img/paper_1.jpg | width=100)
-    ![paper prototype 2](./img/paper_2.jpg | width=100)
-    ![paper prototype 3](./img/paper_3.jpg | width=100)
+   My paper prototype for this algorithm can be found in the `img/` folder.
 
     Once I had an array of arrays of pieces to flip, I could then determine if a selected square was valid: if all arrays were empty, the move was invalid.
 
